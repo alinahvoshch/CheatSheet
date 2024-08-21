@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Localization;
 using Terraria.UI;
 
 namespace CheatSheet.UI
@@ -49,7 +50,9 @@ namespace CheatSheet.UI
 			this.Height = (float)this._textures[0].Height();
 			Index = defaultIndex;
 
-			onHover += (a, b) => UIView.HoverText = $"Current: {_hoverTexts[Index]}{Environment.NewLine}Next: {GetNextTooltip()}{Environment.NewLine}Scroll to cycle snap positions";
+			onHover += (a, b) => UIView.HoverText = $"{Text("Current")}{_hoverTexts[Index]}{Environment.NewLine}{Text("Next")}{GetNextTooltip()}{Environment.NewLine}{Text("ScrollToCycleSnapPositions")}";
+
+			string Text(string key) => Language.GetTextValue($"Mods.CheatSheet.PaintTools.{key}");
 		}
 
 		public void AddImage(Asset<Texture2D> texture)

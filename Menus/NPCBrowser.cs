@@ -259,7 +259,7 @@ namespace CheatSheet.Menus
 				var mods = NPCBrowser.ModToNPCs.Keys.ToList();
 				mods.Sort();
 				if(mods.Count == 0) {
-					Main.NewText("No NPC have been added by mods.");
+					Main.NewText(CSText("NoNPCHaveBeenAddedByMods"));
 				}
 				else {
 					if (uIImage.ForegroundColor == NPCBrowser.buttonSelectedColor)

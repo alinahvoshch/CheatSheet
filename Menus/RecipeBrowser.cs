@@ -422,7 +422,7 @@ namespace CheatSheet.Menus
 				mods = mods.Intersect(RecipeBrowserWindow.categories[0].Select(x => (recipeView.allRecipeSlot[x].recipe /*as ModRecipe*/)?.Mod?.Name ?? null)).ToList();
 				mods.Sort();
 				if (mods.Count == 0) {
-					Main.NewText("No Recipes have been added by mods.");
+					Main.NewText(CSText("NoRecipesHaveBeenAddedByMods"));
 					return;
 				}
 				if (uIImage.ForegroundColor == RecipeBrowserWindow.buttonSelectedColor)

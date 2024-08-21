@@ -15,6 +15,7 @@ using System.Text;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Social;
 
@@ -23,6 +24,7 @@ namespace CheatSheet.Menus
 	internal class PaintToolsUI : UISlideWindow
 	{
 		internal static string CSText(string key, string category = "PaintTools") => CheatSheet.CSText(category, key);
+		internal static string CSTextSB(string key, string category = "SchematicsBrowser") => CheatSheet.CSText(category, key);
 		internal UIImageListButton btnSnap;
 
 		internal UIView infoPanel;
@@ -167,14 +169,14 @@ namespace CheatSheet.Menus
 
 			upVoteButton.Position = new Vector2(0, 0);
 			upVoteButton.onLeftClick += (a, b) => Vote(true);
-			upVoteButton.Tooltip = "Vote Up";
+			upVoteButton.Tooltip = CSTextSB("VoteUp");
 			infoPanel.AddChild(upVoteButton);
 
 			downVoteButton = new UIImage(CheatSheet.instance.Assets.Request<Texture2D>("UI/VoteDown", ReLogic.Content.AssetRequestMode.ImmediateLoad));
 
 			downVoteButton.Position = new Vector2(0, 24);
 			downVoteButton.onLeftClick += (a, b) => Vote(false);
-			downVoteButton.Tooltip = "Vote Down";
+			downVoteButton.Tooltip = CSTextSB("VoteDown");
 			infoPanel.AddChild(downVoteButton);
 
 			infoPanel.Visible = false;
@@ -186,7 +188,7 @@ namespace CheatSheet.Menus
 			submitPanel.Height = 44;
 			AddChild(submitPanel);
 
-			submitLabel = new UILabel("Submit Name:");
+			submitLabel = new UILabel(CSTextSB("SubmitName"));
 			submitLabel.Scale = 0.35f;
 			submitLabel.Position = new Vector2(0, 0);
 			submitPanel.AddChild(submitLabel);
@@ -200,7 +202,7 @@ namespace CheatSheet.Menus
 
 			submitButton.Position = new Vector2(178, -2);
 			submitButton.onLeftClick += (a, b) => Submit();
-			submitButton.Tooltip = "Submit to Schematics Browser";
+			submitButton.Tooltip = CSTextSB("SubmitToSchematicsBrowser");
 			submitPanel.AddChild(submitButton);
 
 			submitPanel.Visible = false;
@@ -214,19 +216,19 @@ namespace CheatSheet.Menus
 				return;
 			if (PaintToolsSlot.CurrentSelect.browserID == -1)
 			{
-				Main.NewText("Already submitted.");
+				Main.NewText(CSTextSB("AlreadySubmitted"));
 				return;
 			}
 			if (PaintToolsSlot.CurrentSelect.browserID != 0)
 				return;
 			if (submitWait)
 			{
-				Main.NewText("Be patient.");
+				Main.NewText(CSTextSB("BePatient"));
 				return;
 			}
 			if (SocialAPI.Mode != SocialMode.Steam)
 			{
-				Main.NewText("Online schematics only works on Steam version");
+				Main.NewText(CSTextSB("OnlineSchematicsOnlyWorksOnSteamVersion"));
 				return;
 			}
 			try
@@ -241,15 +243,15 @@ namespace CheatSheet.Menus
 					string base64tiles = PaintToolsEx.SaveTilesToBase64(PaintToolsSlot.CurrentSelect.stampInfo.Tiles);
 					if (string.IsNullOrEmpty(base64tiles))
 					{
-						Main.NewText("Oops, base64tiles is bad.");
+						Main.NewText(CSTextSB("OopsBase64TilesIsBad"));
 					}
 					else if (string.IsNullOrEmpty(submitInput.Text))
 					{
-						Main.NewText("Please name your creation.");
+						Main.NewText(CSTextSB("PleaseNameYourCreation"));
 					}
 					else if (base64tiles.Length > 5000)
 					{
-						Main.NewText("Selection too big for now.");
+						Main.NewText(CSTextSB("SelectionTooBigForNow"));
 					}
 					else
 					{
@@ -270,7 +272,7 @@ namespace CheatSheet.Menus
 			}
 			catch
 			{
-				Main.NewText("Schematics Server problem 5");
+				Main.NewText(Language.GetTextValue($"Mods.CheatSheet.SchematicsBrowser.SchematicsServerProblemX", 5));
 				submitWait = false;
 			}
 		}
@@ -289,17 +291,17 @@ namespace CheatSheet.Menus
 					}
 					else
 					{
-						Main.NewText("Schematics Server problem 12");
+						Main.NewText(Language.GetTextValue($"Mods.CheatSheet.SchematicsBrowser.SchematicsServerProblemX", 12));
 					}
 				}
 				else
 				{
-					Main.NewText("Schematics Server problem 2");
+					Main.NewText(Language.GetTextValue($"Mods.CheatSheet.SchematicsBrowser.SchematicsServerProblemX", 2));
 				}
 			}
 			catch
 			{
-				Main.NewText("Schematics Server problem 3");
+				Main.NewText(Language.GetTextValue($"Mods.CheatSheet.SchematicsBrowser.SchematicsServerProblemX", 3));
 			}
 			submitWait = false;
 		}
@@ -314,7 +316,7 @@ namespace CheatSheet.Menus
 			int voteInt = up ? 1 : -1;
 			if (PaintToolsSlot.CurrentSelect.vote == voteInt)
 			{
-				Main.NewText("You already voted");
+				Main.NewText(CSTextSB("YouAlreadyVoted"));
 				return;
 			}
 
@@ -329,7 +331,7 @@ namespace CheatSheet.Menus
 				CheatSheet.instance.paintToolsUI.downVoteButton.ForegroundColor = Color.Gray;
 			if (SocialAPI.Mode != SocialMode.Steam)
 			{
-				Main.NewText("Online schematics only works on Steam version");
+				Main.NewText(CSTextSB("OnlineSchematicsOnlyWorksOnSteamVersion"));
 				return;
 			}
 			try
@@ -361,11 +363,11 @@ namespace CheatSheet.Menus
 		{
 			if (!e.Cancelled)
 			{
-				Main.NewText("Thanks for voting.");
+				Main.NewText(CSTextSB("ThanksForVoting"));
 			}
 			else
 			{
-				Main.NewText("Schematics Server voting problem");
+				Main.NewText(CSTextSB("SchematicsServerVotingProblem"));
 			}
 		}
 

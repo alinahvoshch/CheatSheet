@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using Terraria;
+using Terraria.Localization;
+using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
 namespace CheatSheet
@@ -11,9 +13,9 @@ namespace CheatSheet
 		[DefaultValue(false)]
 		public bool DisableCheatsForNonHostUsers { get; set; }
 
-		public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref string message) {
+		public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref NetworkText message) {
 			if (!CheatSheet.IsPlayerLocalServerOwner(Main.player[whoAmI])) {
-				message = "You are not the server owner so you can not change this config";
+				message = this.GetLocalization("YouAreNotServerOwnerCantChangeConfig").ToNetworkText();
 				return false;
 			}
 			return base.AcceptClientChanges(pendingConfig, whoAmI, ref message);

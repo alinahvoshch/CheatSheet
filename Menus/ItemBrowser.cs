@@ -264,7 +264,7 @@ namespace CheatSheet.Menus
 				var mods = ItemBrowser.ModToItems.Keys.ToList();
 				mods.Sort();
 				if (mods.Count == 0) {
-					Main.NewText("No Items have been added by mods.");
+					Main.NewText(CSText("NoItemsHaveBeenAddedByMods"));
 				}
 				else {
 					if(uIImage.ForegroundColor == ItemBrowser.buttonSelectedColor)

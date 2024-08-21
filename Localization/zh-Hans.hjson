@@ -68,6 +68,7 @@ Mods: {
 		RecipeBrowser: {
 			AllRecipes: 全部合成配方
 			CycleModSpecificRecipes: 模组
+			// NoRecipesHaveBeenAddedByMods: No Recipes have been added by mods.
 		}
 
 		ConfigurationTool: {
@@ -103,6 +104,7 @@ Mods: {
 			FilteredNPCs: 筛选NPC
 			CycleModSpecificNPCs: 模组
 			SpawnNPCNotification: "{0} 已被 {1} 召唤"
+			// NoNPCHaveBeenAddedByMods: No NPC have been added by mods.
 		}
 
 		ItemBrowser: {
@@ -119,6 +121,7 @@ Mods: {
 			Pets: 宠物
 			Mounts: 坐骑
 			CycleModSpecificItems: 模组
+			// NoItemsHaveBeenAddedByMods: No Items have been added by mods.
 		}
 
 		PaintTools: {
@@ -146,6 +149,27 @@ Mods: {
 			TransparentSelectionOff: "    消除背景墙: 关"
 			PriorBrush: 使用笔刷之前请先使用吸管提取图像.
 			DataExport: "数据已导出至该路径  "
+			// Current: "Current: "
+			// Next: "Next: "
+			// ScrollToCycleSnapPositions: Scroll to cycle snap positions
+		}
+
+		# These are not in use right now, so they don't actually need localization yet
+		SchematicsBrowser: {
+			// SubmitToSchematicsBrowser: Submit to Schematics Browser
+			// VoteUp: Vote Up
+			// VoteDown: Vote Down
+			// SubmitName: Submit Name:
+			// ThanksForVoting: Thanks for voting.
+			// SchematicsServerVotingProblem: Schematics Server voting problem
+			// OnlineSchematicsOnlyWorksOnSteamVersion: Online schematics only works on Steam version
+			// YouAlreadyVoted: You already voted
+			// SchematicsServerProblemX: Schematics Server problem {0}
+			// SelectionTooBigForNow: Selection too big for now.
+			// PleaseNameYourCreation: Please name your creation.
+			// OopsBase64TilesIsBad: Oops, base64tiles is bad.
+			// BePatient: Be patient.
+			// AlreadySubmitted: Already submitted.
 		}
 
 		Keybinds.ToggleCheatSheetHotbar.DisplayName: 开关作弊小抄快捷栏
