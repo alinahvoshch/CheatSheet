@@ -398,6 +398,7 @@ namespace CheatSheet.Menus
 		private void bClose_onLeftClick(object sender, EventArgs e)
 		{
 			Hide();
+			mod.paintToolsHotbar.Hide();
 			mod.hotbar.DisableAllWindows();
 		}
 	}
