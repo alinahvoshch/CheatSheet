@@ -1,110 +1,111 @@
 Mods: {
 	CheatSheet: {
 		Hotbar: {
-			ShowItemBrowser: Браузер Предметов
+			ShowItemBrowser: Браузер предметов
 			ShowClearMenu: Меню очистки
-			ShowNPCBrowser: Браузер НИП'ов
-			ShowRecipeBrowser: Браузер Рецептов
-			ShowModExtensionCheats: Браузер Расширений
-			ShowPaintTools: Инструменты Копирования
-			ExtraAccessorySlots: Доп. слоты Аксессуаров
-			VacuumItems: Предметный Магнит
-			ShowNPCButcherer: Уничтожитель Существ
-			ShowQuickWaypoints: Быстр. Точки Телепортации
-			ConfigureAvailableTools: Настройка Панели
+			ShowNPCBrowser: Браузер существ
+			ShowRecipeBrowser: Браузер рецептов
+			ShowModExtensionCheats: Браузер расширений
+			ShowPaintTools: Инструменты копирования
+			ExtraAccessorySlots: Доп. слоты для аксессуаров
+			VacuumItems: Магнит предметов
+			ShowNPCButcherer: Убить существ
+			ShowQuickWaypoints: Быстрые точки телепортации
+			ConfigureAvailableTools: Настройка инструментов
 		}
 
 		Butcherer: {
 			ButcherHostileNPCs: Убить враждебных существ
-			ButcherHostileAndFriendlyNPCs: Убить враждебный существ и городских НИП'ов
-			ButcherFriendlyNPCs: Убить городских НИП'ов
-			ButcherNotification: Существа/НИП'ы были убиты игроком {0}
+			ButcherHostileAndFriendlyNPCs: Убить враждебных и дружественных существ
+			ButcherFriendlyNPCs: Убить дружественных существ
+			ButcherNotification: Игрок {0} убил всех существ
 		}
 
-		Vacuum.VacuumNotification: Предметы, лежащие на земле были притянуты игроком {0}
+		Vacuum.VacuumNotification: Игрок {0} притянул к себе все предметы, лежащие на земле
 
 		Teleport: {
-			Dungeon: Подземелье
-			Spawnpoint: Точка Возрождения
-			Hell: Ад
-			Temple: Храм Ящеров
-			Random: Случайные Координаты
+			Dungeon: Темница
+			Spawnpoint: Точка возрождения
+			Hell: Преисподняя
+			Temple: Храм джунглей
+			Random: Случайное место
 		}
 
 		QuickClear: {
-			ClearDroppedItems: Удалить предметы, лежащие на земле
-			ClearProjectiles: Удалить снаряды
-			ClearBuffs: Удалить баффы
-			ClearDebuffs: Удалить дебаффы
-			ItemClearNotification: Предметы, лежащие на земле удалены игроком {0}
-			ProjectileClearNotification: Снаряды удалены игроком {0}
+			ClearDroppedItems: Очистить предметы, лежащие на земле
+			ClearProjectiles: Очистить снаряды
+			ClearBuffs: Очистить баффы
+			ClearDebuffs: Очистить дебаффы
+			ItemClearNotification: Игрок {0} очистил все предметы, лежащие на земле
+			ProjectileClearNotification: Игрок {0} удалил все снаряды
 		}
 
 		SpawnRate: {
-			SpawnRateMultiplier: Рейт Спавна Существ: 1х
-			SpawnRateMultiplierNew: "Рейт Спавна Существ: "
-			SpawnRateMultiplierText: "Рейт Спавна Существ теперь в "
-			SpawnRateNormalValue: " больше обычной"
+			SpawnRateMultiplier: Множитель появления существ: 1х
+			SpawnRateMultiplierNew: Множитель появления существ:
+			SpawnRateMultiplierText: Множитель появления существ теперь в
+			SpawnRateNormalValue: раз больше обычного
 		}
 
 		LightHack: {
-			LightHackDisabled: Хак Освещения: Отключен
-			LightHack25%: Хак Освещения: 25%
-			LightHack50%: Хак Освещения: 50%
-			LightHack100%: Хак Освещения: 100%
+			LightHackDisabled: Хак освещения: Отключён
+			LightHack25%: Хак освещения: 25%
+			LightHack50%: Хак освещения: 50%
+			LightHack100%: Хак освещения: 100%
 		}
 
 		GodMode: {
-			GodModeDisabled: Режим Бога отключен
-			GodModeEnabled: Режим Бога включен
+			GodModeDisabled: Режим бога: Отключён
+			GodModeEnabled: Режим бога: Включён
 		}
 
 		MinionSlot: {
-			MinionSlotBooster: Количество доп. Миньонов: +0
-			MinionSlotBoosterNew: "Количество доп. Миньонов: "
-			MinionSlotBoosterText: "Количество доп. Миньонов теперь "
+			MinionSlotBooster: Доп. слотов для миньонов: 0
+			MinionSlotBoosterNew: Доп. слотов для миньонов:
+			MinionSlotBoosterText: Доп. слотов для миньонов теперь
 		}
 
 		RecipeBrowser: {
 			AllRecipes: Все рецепты
-			CycleModSpecificRecipes: Рецепты из модификаций
-			// NoRecipesHaveBeenAddedByMods: No Recipes have been added by mods.
+			CycleModSpecificRecipes: Рецепты из модов
+			NoRecipesHaveBeenAddedByMods: Ни один из модов не добавляет новых рецептов.
 		}
 
 		ConfigurationTool: {
-			ItemBrowser: Браузер Предметов
-			NPCBrowser: Браузер НИП'ов
-			RecipeBrowser: Браузер Рецептов
-			MinionBooster: Бустер доп. Миньонов
-			Butcher: Уничтожитель Существ
+			ItemBrowser: Браузер предметов
+			NPCBrowser: Браузер существ
+			RecipeBrowser: Браузер рецептов
+			MinionBooster: Доп. слоты для миньонов
+			Butcher: Убить существ
 			ClearMenu: Меню очистки
-			ExtraAccessorySlots: Доп. слоты Аксессуаров
+			ExtraAccessorySlots: Доп. слоты для аксессуаров
 			ModExtensions: Расширения
-			PaintTools: Инструменты Копирования
-			SpawnRate: Рейт Спавна Существ
-			Vacuum: Предметный Магнит
-			Waypoints: Точки Телепортации
-			LightHack: Хак Освещения
-			GodMode: Режим Бога
+			PaintTools: Инструменты копирования
+			SpawnRate: Множитель появления существ
+			Vacuum: Магнит предметов
+			Waypoints: Точки телепортации
+			LightHack: Хак освещения
+			GodMode: Режим бога
 		}
 
 		ExtendedCheatMenu.NoExtensionCheatModsInstalled:
 			'''
-			Не обнаружено
-			установленных
-			расширений
+			Моды,
+			добавляющие
+			расширения,
+			отсутствуют.
 			'''
-		ExtraAccessorySlots.ExtraAccessorySlots: "Доп. слоты Аксессуаров: "
+		ExtraAccessorySlots.ExtraAccessorySlots: Доп. слотов для аксессуаров:
 
 		MobBrowser: {
 			AllNPCs: Все существа
 			Bosses: Боссы
-			TownNPCs: Городские НИП'ы
-			NetIDNPCs: NetID Существа
-			FilteredNPCs: Отсортированные Существа
-			CycleModSpecificNPCs: Существа из модификаций
-			SpawnNPCNotification: "{0} был призван игроком {1}"
-			// NoNPCHaveBeenAddedByMods: No NPC have been added by mods.
+			TownNPCs: Городские жители
+			NetIDNPCs: Разновидности одного существа
+			FilteredNPCs: Отсортированные существа
+			CycleModSpecificNPCs: Существа из модов
+			SpawnNPCNotification: Игрок {1} призвал {0}
+			NoNPCHaveBeenAddedByMods: Ни один из модов не добавляет новых существ.
 		}
 
 		ItemBrowser: {
@@ -114,44 +115,44 @@ Mods: {
 			Armor: Броня
 			Accessories: Аксессуары
 			Blocks: Блоки
-			Ammo: Аммуниция
+			Ammo: Боеприпасы
 			Potions: Зелья
-			Expert: Эксперт режим
-			Furniture: Фурнитура
+			Expert: Предметы режима Эксперт
+			Furniture: Мебель
 			Pets: Питомцы
 			Mounts: Маунты
-			CycleModSpecificItems: Предметы из модификаций
-			// NoItemsHaveBeenAddedByMods: No Items have been added by mods.
+			CycleModSpecificItems: Предметы из модов
+			NoItemsHaveBeenAddedByMods: Ни один из модов не добавляет новых предметов.
 		}
 
 		PaintTools: {
-			ExportData: Экспорт
-			ImportData: Импорт
-			DeleteSelection: Удалить выделение
-			SnapTopLeft: Snap: Левый Верхний угол
-			SnapTopCenter: Snap: По центру Верхнего края
-			SnapTopRight: Snap: Правый Верхний угол
-			SnapLeftCenter: Snap: По центру Левого края
-			SnapCenter: Snap: По Центру
-			SnapRightCenter: Snap: По центру Правого края
-			SnapBottomLeft: Snap: Нижний Левый угол
-			SnapBottomCenter: Snap: По центру Нижнего края
-			SnapBottomRight: Snap: Нижний Правый угол
-			PaintTiles: "    Скопировать выделение"
-			EyeDropper: "    Выделение"
-			Undo: "    Отменить последнюю покраску (Пкм: Последние 10) ["
-			Undo2: " шагов]"
-			NoUndo: В истории не обнаружено действий, которые можно было бы отменить.
-			UndoLeft: " действий осталось в истории для отмены."
-			FlipHorizontal: Отразить по Горизонтали
-			FlipVertical: Отразить по Вертикали
-			TransparentSelectionOn: "    Переключить Прозрачное Выделение: Выкл."
-			TransparentSelectionOff: "    Переключить Прозрачное Выделение: Вкл."
-			PriorBrush: Сначала нужно использовать выделение.
-			DataExport: "Экспорт в "
-			// Current: "Current: "
-			// Next: "Next: "
-			// ScrollToCycleSnapPositions: Scroll to cycle snap positions
+			ExportData: Экспорт данных
+			ImportData: Импорт данных
+			DeleteSelection: Удалить выделенное
+			SnapTopLeft: Взять выделенное за левый верхний угол
+			SnapTopCenter: Взять выделенное за центр верхнего края
+			SnapTopRight: Взять выделенное за правый верхний угол
+			SnapLeftCenter: Взять выделенное за центр левого края
+			SnapCenter: Взять выделенное за центр
+			SnapRightCenter: Взять выделенное за центр правого края
+			SnapBottomLeft: Взять выделенное за нижний левый угол
+			SnapBottomCenter: Взять выделенное за центр нижнего края
+			SnapBottomRight: Взять выделенное за нижний правый угол
+			PaintTiles: Вставить
+			EyeDropper: Выделить
+			Undo: Отменить последнюю вставку (ПКМ: Последние 10 вставок) [
+			Undo2: " действий]"
+			NoUndo: Не осталось действий, которые можно было бы отменить.
+			UndoLeft: " действий осталось, которые можно отменить."
+			FlipHorizontal: Отразить по горизонтали
+			FlipVertical: Отразить по вертикали
+			TransparentSelectionOn: Прозрачное выделение: Отключено
+			TransparentSelectionOff: Прозрачное выделение: Включено
+			PriorBrush: Сначала используйте выделение, перед тем как что-либо вставлять.
+			DataExport: "Экспортировано по пути "
+			Current: "Текущ.: "
+			Next: "След.: "
+			ScrollToCycleSnapPositions: Нажимайте для изменения типа взятия
 		}
 
 		# These are not in use right now, so they don't actually need localization yet
@@ -176,20 +177,20 @@ Mods: {
 
 		Configs: {
 			CheatSheetClientConfig: {
-				DisplayName: Конфигурация игрока
+				DisplayName: Клиентские настройки
 
 				HotbarShownByDefault: {
-					Label: Панель Cheat Sheet отображается по умолчанию
-					Tooltip: Позволяет отображать панель Cheat Sheet по умолчанию, а не скрывать ее.
+					Label: Отображать панель в открытом виде по умолчанию
+					Tooltip: Панель с инструментами по умолчанию будет открыта, а не скрыта
 				}
 			}
 
 			CheatSheetServerConfig: {
-				DisplayName: Конфигурация сервера
+				DisplayName: Серверные настройки
 
 				DisableCheatsForNonHostUsers: {
-					Label: Отключить читы для пользователей, не являющихся хостами
-					Tooltip: Отключить функции этого мода для игроков в мультиплеере, кроме хоста.
+					Label: Отключить панель для гостей сервера
+					Tooltip: Отключить функции этого мода для всех игроков в мультиплеере, кроме хоста.
 				}
 			}
 		}
