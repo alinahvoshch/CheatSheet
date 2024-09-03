@@ -30,21 +30,16 @@ namespace CheatSheet.Menus
 
 		private int slotRows = 6;
 
-		public int[] selectedCategory
-		{
-			get
-			{
+		public int[] selectedCategory {
+			get {
 				return this._selectedCategory;
 			}
-			set
-			{
+			set {
 				List<int> list = value.ToList<int>();
 
-				for (int i = 0; i < list.Count; i++)
-				{
+				for (int i = 0; i < list.Count; i++) {
 					NPCSlot slot = this.allNPCSlot[list[i]];
-					if (slot.npcType == 0)
-					{
+					if (slot.npcType == 0) {
 						list.RemoveAt(i);
 						i--;
 					}
@@ -53,13 +48,11 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		public NPCView()
-		{
+		public NPCView() {
 			base.Width = (this.slotSize + (float)this.slotSpace) * (float)this.slotColumns + (float)this.slotSpace + 20f;
 			base.Height = 200f;
 			this.allNPCSlot = new NPCSlot[TextureAssets.Npc.Length + negativeSlots];
-			for (int i = 0; i < this.allNPCSlot.Length; i++)
-			{
+			for (int i = 0; i < this.allNPCSlot.Length; i++) {
 				int type = (i >= this.allNPCSlot.Length - negativeSlots) ? -(i - this.allNPCSlot.Length + negativeSlots + 1) : i;
 				this.allNPCSlot[i] = new NPCSlot(type, i);
 			}
@@ -76,17 +69,14 @@ namespace CheatSheet.Menus
 				index++;
 			}*/
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
+		public override void Draw(SpriteBatch spriteBatch) {
 			base.Draw(spriteBatch);
 		}
 
-		public void ReorderSlots()
-		{
+		public void ReorderSlots() {
 			base.ScrollPosition = 0f;
 			base.ClearContent();
-			for (int i = 0; i < this.activeSlots.Length; i++)
-			{
+			for (int i = 0; i < this.activeSlots.Length; i++) {
 				int num = i;
 				NPCSlot slot = this.allNPCSlot[this.activeSlots[num]];
 				int num2 = i % this.slotColumns;

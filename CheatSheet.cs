@@ -10,15 +10,11 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using Terraria;
 using Terraria.Chat;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.UI;
-using Terraria.UI.Chat;
 
 // TODO: move windows below inventory
 // TODO: Filter recipes with unobtainables.
@@ -71,17 +67,14 @@ namespace CheatSheet
 		internal const int DefaultNumberOnlineToLoad = 30;
 		public int numberOnlineToLoad = 0;
 
-		public CheatSheet()
-		{
+		public CheatSheet() {
 		}
 
 		// to do: debugmode, stat
 
-		public override void Load()
-		{
+		public override void Load() {
 			// Since we are using hooks not in older versions, and since ItemID.Count changed, we need to do this.
-			if (BuildInfo.tMLVersion < new Version(0, 11, 5))
-			{
+			if (BuildInfo.tMLVersion < new Version(0, 11, 5)) {
 				throw new Exception("\nThis mod uses functionality only present in the latest tModLoader. Please update tModLoader to use this mod\n\n");
 			}
 			instance = this;
@@ -92,8 +85,7 @@ namespace CheatSheet
 
 			ToggleCheatSheetHotbarHotKey = KeybindLoader.RegisterKeybind(this, "ToggleCheatSheetHotbar", "K");
 
-			if (Main.rand == null)
-			{
+			if (Main.rand == null) {
 				Main.rand = new Terraria.Utilities.UnifiedRandom();
 			}
 
@@ -114,8 +106,7 @@ namespace CheatSheet
 			herosPermissions[QuickTeleport_Permission] = true;
 		}
 
-		public override void Unload()
-		{
+		public override void Unload() {
 			ButtonClicked.Clear();
 			ButtonTexture.Clear();
 			ButtonTooltip.Clear();
@@ -136,8 +127,7 @@ namespace CheatSheet
 			itemBrowser = null;
 			npcBrowser = null;
 			recipeBrowser = null;
-			if (hotbar != null)
-			{
+			if (hotbar != null) {
 				hotbar.buttonView?.RemoveAllChildren();
 				hotbar.buttonView = null;
 				hotbar = null;
@@ -157,8 +147,7 @@ namespace CheatSheet
 			GodMode.UnloadStatic();
 		}
 
-		internal static string CSText(string category, string key)
-		{
+		internal static string CSText(string category, string key) {
 			return Language.GetTextValue($"Mods.CheatSheet.{category}.{key}");
 			//return translations[$"Mods.CheatSheet.{category}.{key}"].GetTranslation(Language.ActiveCulture);
 			// This isn't good until after load....can revert after fixing static initializers for string[]
@@ -205,24 +194,19 @@ namespace CheatSheet
 		//	CheatSheet.instance.hotbar.ChangedConfiguration();
 		//}
 
-		public override void PostSetupContent()
-		{
+		public override void PostSetupContent() {
 			ConfigurationLoader.Initialized();
-			try
-			{
-				if (ModLoader.TryGetMod("HEROsMod", out Mod herosMod))
-				{
+			try {
+				if (ModLoader.TryGetMod("HEROsMod", out Mod herosMod)) {
 					SetupHEROsModIntegration(herosMod);
 				}
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				Logger.Error("CheatSheet->HEROsMod PostSetupContent Error: " + e.StackTrace + e.Message);
 			}
 		}
 
-		private void SetupHEROsModIntegration(Mod herosMod)
-		{
+		private void SetupHEROsModIntegration(Mod herosMod) {
 			// Add Permissions always.
 			herosMod.Call(
 				// Special string
@@ -234,8 +218,7 @@ namespace CheatSheet
 			);
 
 			// Add Buttons only to non-servers (otherwise the server will crash, since textures aren't loaded on servers)
-			if (!Main.dedServ)
-			{
+			if (!Main.dedServ) {
 				herosMod.Call(
 					// Special string
 					"AddSimpleButton",
@@ -277,13 +260,11 @@ namespace CheatSheet
 			CheatSheet.instance.hotbar.ChangedConfiguration();
 		}
 
-		public void SetupUI()
-		{
+		public void SetupUI() {
 			//System.Collections.Concurrent.ConcurrentQueue<Action> glQueue = (System.Collections.Concurrent.ConcurrentQueue<Action>)typeof(Terraria.ModLoader.Engine.GLCallLocker).GetField("actionQueue", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
 			//glQueue.Enqueue(() =>
 			//{
-			if (!Main.dedServ)
-			{
+			if (!Main.dedServ) {
 				//for (int i = 0; i < ItemLoader.ItemCount; i++)
 				//{
 				//	Main.instance.LoadItem(i);
@@ -345,8 +326,7 @@ namespace CheatSheet
 					else
 						hotbar.Show();
 				}
-				catch (Exception e)
-				{
+				catch (Exception e) {
 					Logger.Error(e.ToString());
 				}
 			}
@@ -354,7 +334,7 @@ namespace CheatSheet
 		}
 
 		public static bool IsPlayerLocalServerOwner(Player player) {
-			if(Main.netMode == 1) {
+			if (Main.netMode == 1) {
 				return Netplay.Connection.Socket.GetRemoteAddress().IsLocalHost();
 			}
 
@@ -388,8 +368,7 @@ namespace CheatSheet
 
 		private KeyboardState PreviousKeyState;
 
-		public void RegisterButton(Asset<Texture2D> texture, Action buttonClickedAction, Func<string> tooltip)
-		{
+		public void RegisterButton(Asset<Texture2D> texture, Action buttonClickedAction, Func<string> tooltip) {
 			ButtonClicked.Add(buttonClickedAction);
 			ButtonTexture.Add(texture);
 			ButtonTooltip.Add(tooltip);
@@ -402,12 +381,10 @@ namespace CheatSheet
 		internal static List<Asset<Texture2D>> ButtonTexture = new List<Asset<Texture2D>>();
 		internal static List<Func<string>> ButtonTooltip = new List<Func<string>>();
 
-		public override object Call(params object[] args)
-		{
+		public override object Call(params object[] args) {
 			try {
 				string message = args[0] as string;
-				if (message == "AddButton_Test")
-				{
+				if (message == "AddButton_Test") {
 					Logger.Info("Button Adding...");
 					RegisterButton(args[1] as Asset<Texture2D>, args[2] as Action, args[3] as Func<string>);
 					Logger.Info("...Button Added");
@@ -425,13 +402,11 @@ namespace CheatSheet
 			return null;
 		}
 
-		public override void HandlePacket(BinaryReader reader, int whoAmI)
-		{
+		public override void HandlePacket(BinaryReader reader, int whoAmI) {
 			CheatSheetMessageType msgType = (CheatSheetMessageType)reader.ReadByte();
 			string key;
 
-			switch (msgType)
-			{
+			switch (msgType) {
 				case CheatSheetMessageType.SpawnNPC:
 					int npcType = reader.ReadInt32();
 					int netID = reader.ReadInt32();
@@ -444,8 +419,7 @@ namespace CheatSheet
 
 				case CheatSheetMessageType.QuickClear:
 					int clearType = reader.ReadInt32();
-					switch (clearType)
-					{
+					switch (clearType) {
 						case 0:
 							key = "Mods.CheatSheet.QuickClear.ItemClearNotification";
 							//message = "Items were cleared by ";
@@ -522,8 +496,7 @@ namespace CheatSheet
 			}
 		}
 
-		public static Rectangle GetClippingRectangle(SpriteBatch spriteBatch, Rectangle r)
-		{
+		public static Rectangle GetClippingRectangle(SpriteBatch spriteBatch, Rectangle r) {
 			//Vector2 vector = new Vector2(this._innerDimensions.X, this._innerDimensions.Y);
 			//Vector2 position = new Vector2(this._innerDimensions.Width, this._innerDimensions.Height) + vector;
 			Vector2 vector = new Vector2(r.X, r.Y);
@@ -542,19 +515,15 @@ namespace CheatSheet
 	}
 
 	public static class CheatSheetInterface
-	{ 
-		public static void RegisterButton(Asset<Texture2D> texture, Action buttonClickedAction, Func<string> tooltip)
-		{
-			if (!Main.dedServ)
-			{
+	{
+		public static void RegisterButton(Asset<Texture2D> texture, Action buttonClickedAction, Func<string> tooltip) {
+			if (!Main.dedServ) {
 				ModContent.GetInstance<CheatSheet>().RegisterButton(texture, buttonClickedAction, tooltip);
 			}
 		}
 
-		public static void RegisterButton(CheatSheetButton csb)
-		{
-			if (!Main.dedServ)
-			{
+		public static void RegisterButton(CheatSheetButton csb) {
+			if (!Main.dedServ) {
 				ModContent.GetInstance<CheatSheet>().RegisterButton(csb.texture, csb.buttonClickedAction, csb.tooltip);
 			}
 		}
@@ -562,16 +531,14 @@ namespace CheatSheet
 		/// <summary>
 		/// Returns all extra accessories for the given player
 		/// </summary>
-		public static IEnumerable<Item> GetExtraAccessories(Player player)
-		{
+		public static IEnumerable<Item> GetExtraAccessories(Player player) {
 			return player.GetModPlayer<CheatSheetPlayer>().ExtraAccessories;
 		}
 
 		/// <summary>
 		/// Returns all extra enabled accessories for the given player
 		/// </summary>
-		public static IEnumerable<Item> GetEnabledExtraAccessories(Player player)
-		{
+		public static IEnumerable<Item> GetEnabledExtraAccessories(Player player) {
 			var cheatSheetPlayer = player.GetModPlayer<CheatSheetPlayer>();
 			return cheatSheetPlayer.ExtraAccessories.Take(cheatSheetPlayer.numberExtraAccessoriesEnabled);
 		}
@@ -580,9 +547,9 @@ namespace CheatSheet
 		/// Returns the extra accessory item at the given index
 		/// Returns null if the index is out of bounds
 		/// </summary>
-		public static Item GetExtraAccessory(Player player, int index)
-		{
-			if (index < 0 || index >= CheatSheetPlayer.MaxExtraAccessories) return null;
+		public static Item GetExtraAccessory(Player player, int index) {
+			if (index < 0 || index >= CheatSheetPlayer.MaxExtraAccessories)
+				return null;
 			return player.GetModPlayer<CheatSheetPlayer>().ExtraAccessories[index];
 		}
 	}
@@ -593,19 +560,16 @@ namespace CheatSheet
 
 		//internal Action buttonClickedAction;
 		//internal Func<string> tooltip;
-		public CheatSheetButton(Asset<Texture2D> texture/*, Action buttonClickedAction, Func<string> tooltip*/)
-		{
+		public CheatSheetButton(Asset<Texture2D> texture/*, Action buttonClickedAction, Func<string> tooltip*/) {
 			this.texture = texture;
 			//	this.buttonClickedAction = buttonClickedAction;
 			//	this.tooltip = tooltip;
 		}
 
-		public virtual void buttonClickedAction()
-		{
+		public virtual void buttonClickedAction() {
 		}
 
-		public virtual string tooltip()
-		{
+		public virtual string tooltip() {
 			return "";
 		}
 	}
@@ -629,16 +593,13 @@ namespace CheatSheet
 	{
 		private static Uri reporturl = new Uri("http://javid.ddns.net/tModLoader/jopojellymods/report.php");
 
-		internal static void ReportException(Exception e)
-		{
+		internal static void ReportException(Exception e) {
 			CheatSheet.instance.Logger.Error("CheatSheet: " + e.Message + e.StackTrace);
-			try
-			{
+			try {
 				ReportData data = new ReportData(e);
 				data.additionaldata = "Loaded Mods: " + string.Join(", ", ModLoader.Mods.Select(m => m.Name).ToArray());
 				string jsonpayload = JsonConvert.SerializeObject(data);
-				using (WebClient client = new WebClient())
-				{
+				using (WebClient client = new WebClient()) {
 					var values = new NameValueCollection
 					{
 						{ "jsonpayload", jsonpayload },
@@ -658,16 +619,14 @@ namespace CheatSheet
 			public string errormessage;
 			public string additionaldata;
 
-			public ReportData()
-			{
+			public ReportData() {
 				tmodversion = BuildInfo.tMLVersion.ToString();
 				modversion = CheatSheet.instance.Version.ToString();
 				mod = "CheatSheet";
 				platform = ModLoader.CompressedPlatformRepresentation;
 			}
 
-			public ReportData(Exception e) : this()
-			{
+			public ReportData(Exception e) : this() {
 				errormessage = e.Message + e.StackTrace;
 			}
 		}

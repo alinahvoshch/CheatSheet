@@ -2,23 +2,18 @@
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Localization;
-using Terraria.UI;
 
 namespace CheatSheet.UI
 {
 	internal class ImageList
 	{
 		public List<Texture2D> listTexture = new List<Texture2D>();
-		public ImageList(Texture2D texture, int width, int height)
-		{
-			for (int y = 0; y < texture.Height / height; y++)
-			{
-				for (int x = 0; x < texture.Width / width; x++)
-				{
+		public ImageList(Texture2D texture, int width, int height) {
+			for (int y = 0; y < texture.Height / height; y++) {
+				for (int x = 0; x < texture.Width / width; x++) {
 					listTexture.Add(texture.Offset(x * width, y * height, width, height));
 				}
 			}
@@ -34,15 +29,13 @@ namespace CheatSheet.UI
 		internal float visibilityInactive = 0.4f;
 		internal int Index { get; set; }
 
-		public T GetValue<T>()
-		{
+		public T GetValue<T>() {
 			T result = (T)_values[Index];
 			return result;
 
 		}
 
-		public UIImageListButton(List<Asset<Texture2D>> textures, List<object> values, List<string> hoverTexts, int defaultIndex = 0)
-		{
+		public UIImageListButton(List<Asset<Texture2D>> textures, List<object> values, List<string> hoverTexts, int defaultIndex = 0) {
 			this._textures = textures;
 			this._values = values;
 			this._hoverTexts = hoverTexts;
@@ -55,60 +48,49 @@ namespace CheatSheet.UI
 			string Text(string key) => Language.GetTextValue($"Mods.CheatSheet.PaintTools.{key}");
 		}
 
-		public void AddImage(Asset<Texture2D> texture)
-		{
+		public void AddImage(Asset<Texture2D> texture) {
 			this._textures.Add(texture);
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-            Texture2D texture = this._textures[Index].Value;
-			if (texture != null)
-            {
+		public override void Draw(SpriteBatch spriteBatch) {
+			Texture2D texture = this._textures[Index].Value;
+			if (texture != null) {
 				spriteBatch.Draw(texture, base.DrawPosition, Color.White);
 			}
 		}
 
-		public void SetVisibility(float whenActive, float whenInactive)
-		{
+		public void SetVisibility(float whenActive, float whenInactive) {
 			this.visibilityActive = MathHelper.Clamp(whenActive, 0f, 1f);
 			this.visibilityInactive = MathHelper.Clamp(whenInactive, 0f, 1f);
 		}
 
-		public int NextIamge()
-		{
+		public int NextIamge() {
 			Index = GetNextImageIndex();
 			return Index;
 		}
 
-		public int PrevIamge()
-		{
+		public int PrevIamge() {
 			Index = GetPrevImageIndex();
 			return Index;
 		}
 
-		private int GetNextImageIndex()
-		{
+		private int GetNextImageIndex() {
 			int result = Index + 1;
-			if (_textures.Count <= result)
-			{
+			if (_textures.Count <= result) {
 				result = 0;
 			}
 			return result;
 		}
 
-		private int GetPrevImageIndex()
-		{
+		private int GetPrevImageIndex() {
 			int result = Index - 1;
-			if (result < 0)
-			{
+			if (result < 0) {
 				result = _textures.Count - 1;
 			}
 			return result;
 		}
 
-		private string GetNextTooltip()
-		{
+		private string GetNextTooltip() {
 			string result = _hoverTexts[GetNextImageIndex()];
 			return result;
 		}

@@ -19,8 +19,7 @@ namespace CheatSheet.Menus
 
 		private CheatSheet mod;
 
-		public SampleHotbar(CheatSheet mod)
-		{
+		public SampleHotbar(CheatSheet mod) {
 			this.mod = mod;
 			//parentHotbar = mod.hotbar;
 
@@ -36,16 +35,13 @@ namespace CheatSheet.Menus
 
 			// Button EventHandlers
 			bSampleButton.onLeftClick += new EventHandler(this.bSampleButton_onLeftClick);
-			bSampleButton.onRightClick += (s, e) =>
-			{
+			bSampleButton.onRightClick += (s, e) => {
 				// Sample handling
 			};
 
 			// Register mousedown
-			onMouseDown += (s, e) =>
-			{
-				if (!Main.LocalPlayer.mouseInterface && !mod.hotbar.MouseInside && !mod.hotbar.button.MouseInside)
-				{
+			onMouseDown += (s, e) => {
+				if (!Main.LocalPlayer.mouseInterface && !mod.hotbar.MouseInside && !mod.hotbar.button.MouseInside) {
 					mouseDown = true;
 					Main.LocalPlayer.mouseInterface = true;
 				}
@@ -63,8 +59,7 @@ namespace CheatSheet.Menus
 			base.Position = new Vector2(Hotbar.xPosition, this.hiddenPosition);
 			base.CenterXAxisToParentCenter();
 			float num = this.spacing;
-			for (int i = 0; i < this.buttonView.children.Count; i++)
-			{
+			for (int i = 0; i < this.buttonView.children.Count; i++) {
 				this.buttonView.children[i].Anchor = AnchorPosition.Left;
 				this.buttonView.children[i].Position = new Vector2(num, 0f);
 				this.buttonView.children[i].CenterYAxisToParentCenter();
@@ -75,23 +70,19 @@ namespace CheatSheet.Menus
 			this.Resize();
 		}
 
-		private void bSampleButton_onLeftClick(object sender, EventArgs e)
-		{
+		private void bSampleButton_onLeftClick(object sender, EventArgs e) {
 			// Sample handling left click
 		}
 
-		public override void Update()
-		{
+		public override void Update() {
 			DoSlideMovement();
 
 			base.CenterXAxisToParentCenter();
 			base.Update();
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			if (Visible)
-			{
+		public override void Draw(SpriteBatch spriteBatch) {
+			if (Visible) {
 				spriteBatch.End();
 				spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, this._rasterizerState, null, Main.UIScaleMatrix);
 				//	Rectangle scissorRectangle = new Rectangle((int)base.X- (int)base.Width, (int)base.Y, (int)base.Width, (int)base.Height);
@@ -130,42 +121,34 @@ namespace CheatSheet.Menus
 
 			//	base.Draw(spriteBatch);
 
-			if (Visible && (base.IsMouseInside() /*|| button.MouseInside*/))
-			{
+			if (Visible && (base.IsMouseInside() /*|| button.MouseInside*/)) {
 				Main.LocalPlayer.mouseInterface = true;
 				//Main.LocalPlayer.showItemIcon = false;
 			}
 
-			if (Visible && IsMouseInside())
-			{
+			if (Visible && IsMouseInside()) {
 				Main.LocalPlayer.mouseInterface = true;
 			}
 
 			float x = FontAssets.MouseText.Value.MeasureString(UIView.HoverText).X;
 			Vector2 vector = new Vector2((float)Main.mouseX, (float)Main.mouseY) + new Vector2(16f);
-			if (vector.Y > (float)(Main.screenHeight - 30))
-			{
+			if (vector.Y > (float)(Main.screenHeight - 30)) {
 				vector.Y = (float)(Main.screenHeight - 30);
 			}
-			if (vector.X > (float)Main.screenWidth - x)
-			{
+			if (vector.X > (float)Main.screenWidth - x) {
 				vector.X = (float)(Main.screenWidth - 460);
 			}
 			Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.MouseText.Value, UIView.HoverText, vector.X, vector.Y, new Color((int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor), Color.Black, Vector2.Zero, 1f);
 		}
 
-		protected override bool IsMouseInside()
-		{
+		protected override bool IsMouseInside() {
 			return hidden ? false : base.IsMouseInside();
 		}
 
-		public void Resize()
-		{
+		public void Resize() {
 			float num = this.spacing;
-			for (int i = 0; i < this.buttonView.children.Count; i++)
-			{
-				if (this.buttonView.children[i].Visible)
-				{
+			for (int i = 0; i < this.buttonView.children.Count; i++) {
+				if (this.buttonView.children[i].Visible) {
 					this.buttonView.children[i].X = num;
 					num += this.buttonView.children[i].Width + this.spacing;
 				}
@@ -174,14 +157,12 @@ namespace CheatSheet.Menus
 			this.buttonView.Width = base.Width;
 		}
 
-		public void Hide()
-		{
+		public void Hide() {
 			hidden = true;
 			arrived = false;
 		}
 
-		public void Show()
-		{
+		public void Show() {
 			mod.hotbar.currentHotbar = this;
 			arrived = false;
 			hidden = false;

@@ -12,8 +12,7 @@ namespace CheatSheet
 	{
 		internal static Item[] singleSlotArray;
 
-		public AllItemsMenu()
-		{
+		public AllItemsMenu() {
 			singleSlotArray = new Item[1];
 		}
 
@@ -40,8 +39,7 @@ namespace CheatSheet
 		//	}
 		//}
 
-		public void DrawUpdateAll(SpriteBatch spriteBatch)
-		{
+		public void DrawUpdateAll(SpriteBatch spriteBatch) {
 			CheatSheet.instance.itemBrowser.Draw(spriteBatch);
 			CheatSheet.instance.npcBrowser.Draw(spriteBatch);
 			CheatSheet.instance.recipeBrowser.Draw(spriteBatch);
@@ -82,22 +80,18 @@ namespace CheatSheet
 			//	DrawUpdateExtraAccessories(spriteBatch);
 		}
 
-		public void DrawUpdatePaintTools(SpriteBatch spriteBatch)
-		{
+		public void DrawUpdatePaintTools(SpriteBatch spriteBatch) {
 			CheatSheet.instance.paintToolsHotbar.UpdateGameScale();
 			CheatSheet.instance.paintToolsHotbar.DrawGameScale(spriteBatch);
 		}
 
-		internal void DrawUpdateExtraAccessories(SpriteBatch spriteBatch)
-		{
-			if (Main.playerInventory && Main.EquipPage == 0)
-			{
+		internal void DrawUpdateExtraAccessories(SpriteBatch spriteBatch) {
+			if (Main.playerInventory && Main.EquipPage == 0) {
 				Point value = new Point(Main.mouseX, Main.mouseY);
 				Rectangle r = new Rectangle(0, 0, (int)((float)TextureAssets.InventoryBack.Value.Width * Main.inventoryScale), (int)((float)TextureAssets.InventoryBack.Value.Height * Main.inventoryScale));
 
 				CheatSheetPlayer csp = Main.LocalPlayer.GetModPlayer<CheatSheetPlayer>();
-				for (int i = 0; i < csp.numberExtraAccessoriesEnabled; i++)
-				{
+				for (int i = 0; i < csp.numberExtraAccessoriesEnabled; i++) {
 					Main.inventoryScale = 0.85f;
 					Item accItem = csp.ExtraAccessories[i];
 					//if (accItem.type > 0)
@@ -106,26 +100,23 @@ namespace CheatSheet
 					//}
 
 					int mH = 0;
-					if (Main.mapEnabled)
-					{
-						if (!Main.mapFullscreen && Main.mapStyle == 1)
-						{
+					if (Main.mapEnabled) {
+						if (!Main.mapFullscreen && Main.mapStyle == 1) {
 							mH = 256;
 						}
-						if (mH + 600 > Main.screenHeight)
-						{
+						if (mH + 600 > Main.screenHeight) {
 							mH = Main.screenHeight - 600;
 						}
 					}
 
 					int num17 = Main.screenWidth - 92 - (47 * 3);
 					int num18 = /*Main.mH +*/mH + 174;
-					if (Main.netMode == 1) num17 -= 47;
+					if (Main.netMode == 1)
+						num17 -= 47;
 					r.X = num17/* + l * -47*/;
 					r.Y = num18 + (0 + i) * 47;
 
-					if (r.Contains(value)/* && !flag2*/)
-					{
+					if (r.Contains(value)/* && !flag2*/) {
 						Main.LocalPlayer.mouseInterface = true;
 						Main.armorHide = true;
 						singleSlotArray[0] = accItem;

@@ -17,8 +17,7 @@ namespace CheatSheet.Menus
 		public static ConfigurationWindow configurationWindow;
 		public static CheatSheet cheatSheet;
 
-		public static UIImage GetButton(Mod mod)
-		{
+		public static UIImage GetButton(Mod mod) {
 			cheatSheet = mod as CheatSheet;
 
 			configurationWindow = new ConfigurationWindow(cheatSheet);
@@ -38,17 +37,14 @@ namespace CheatSheet.Menus
 			return button;
 		}
 
-		private static void bConfigurationToggle_onLeftClick(object sender, EventArgs e)
-		{
+		private static void bConfigurationToggle_onLeftClick(object sender, EventArgs e) {
 			UIImage uIImage = (UIImage)sender;
 
-			if (ConfigurationTool.configurationWindow.selected)
-			{
+			if (ConfigurationTool.configurationWindow.selected) {
 				ConfigurationTool.configurationWindow.selected = false;
 				uIImage.ForegroundColor = Hotbar.buttonUnselectedColor;
 			}
-			else
-			{
+			else {
 				cheatSheet.hotbar.DisableAllWindows();
 				configurationWindow.selected = true;
 				uIImage.ForegroundColor = Hotbar.buttonSelectedColor;
@@ -62,8 +58,7 @@ namespace CheatSheet.Menus
 		public CheatSheet mod;
 		private float spacing = 16f;
 
-		public ConfigurationWindow(CheatSheet mod)
-		{
+		public ConfigurationWindow(CheatSheet mod) {
 			this.mod = mod;
 			this.CanMove = true;
 			base.Width = 280;
@@ -118,16 +113,14 @@ namespace CheatSheet.Menus
 				(bool a)=>ConfigurationLoader.personalConfiguration.GodMode = a,
 			};
 
-			for (int i = 0; i < labels.Length; i++)
-			{
+			for (int i = 0; i < labels.Length; i++) {
 				int iClosure = i;
 				UICheckbox cb = new UICheckbox(labels[i]);
 				cb.Selected = selecteds[i]();
 				cb.X = spacing;
 				cb.Y = i * 24 + spacing;
 				//cb.SelectedChanged += new EventHandler(bCheckBoxTicked);
-				cb.SelectedChanged += (a, b) =>
-				{
+				cb.SelectedChanged += (a, b) => {
 					assignSelected[iClosure](cb.Selected);
 					cb.Selected = selecteds[iClosure]();
 					ConfigurationLoader.SaveSetting();
@@ -140,18 +133,15 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		private void bClose_onLeftClick(object sender, EventArgs e)
-		{
+		private void bClose_onLeftClick(object sender, EventArgs e) {
 			Hide();
 			mod.hotbar.DisableAllWindows();
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
+		public override void Draw(SpriteBatch spriteBatch) {
 			base.Draw(spriteBatch);
 
-			if (Visible && IsMouseInside())
-			{
+			if (Visible && IsMouseInside()) {
 				Main.LocalPlayer.mouseInterface = true;
 				Main.LocalPlayer.cursorItemIconEnabled = false;
 			}

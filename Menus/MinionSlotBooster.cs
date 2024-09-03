@@ -10,16 +10,14 @@ namespace CheatSheet.Menus
 	// TODO, test if server needs to know this as well.
 	internal class MinionSlotBoosterModPlayer : ModPlayer
 	{
-		public override void PostUpdateEquips()
-		{
+		public override void PostUpdateEquips() {
 			Player.maxMinions += MinionSlotBooster.currentBoost;
 		}
 	}
 
 	internal class MinionSlotBoosterModPlayer2 : GlobalTile
 	{
-		public override void ModifyLight(int i, int j, int type, ref float r, ref float g, ref float b)
-		{
+		public override void ModifyLight(int i, int j, int type, ref float r, ref float g, ref float b) {
 			base.ModifyLight(i, j, type, ref r, ref g, ref b);
 		}
 	}
@@ -33,25 +31,21 @@ namespace CheatSheet.Menus
 		private static int currentBoostIndex = 0;
 		public static UIImage button;
 
-		public static UIImage GetButton(Mod mod)
-		{
+		public static UIImage GetButton(Mod mod) {
 			button = new UIImage(TextureAssets.Buff[BuffID.Summoning]);
 
 			button.Tooltip = CSText("MinionSlotBooster");
-			button.onRightClick += (s, e) =>
-			{
+			button.onRightClick += (s, e) => {
 				buttonLogic(false);
 			};
-			button.onLeftClick += (s, e) =>
-			{
+			button.onLeftClick += (s, e) => {
 				buttonLogic(true);
 			};
 			button.ForegroundColor = Color.White;
 			return button;
 		}
 
-		public static void buttonLogic(bool leftMouse)
-		{
+		public static void buttonLogic(bool leftMouse) {
 			int newIndex = leftMouse ? (currentBoostIndex + 1) % boostStrings.Length : (boostStrings.Length + currentBoostIndex - 1) % boostStrings.Length;
 
 			//if (Main.netMode == 1)
@@ -64,12 +58,10 @@ namespace CheatSheet.Menus
 			//}
 		}
 
-		public static void ChangeSettingLogic(int newSetting)
-		{
+		public static void ChangeSettingLogic(int newSetting) {
 			currentBoostIndex = newSetting;
 			currentBoost = boosts[currentBoostIndex];
-			if (!Main.dedServ)
-			{
+			if (!Main.dedServ) {
 				button.Tooltip = CSText("MinionSlotBoosterNew") + " " + boostStrings[currentBoostIndex];
 				Main.NewText(CSText("MinionSlotBoosterText") + " " + boostStrings[currentBoostIndex]);
 			}

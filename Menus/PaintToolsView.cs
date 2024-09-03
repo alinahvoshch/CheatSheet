@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Linq;
-using Terraria;
 
 namespace CheatSheet.Menus
 {
@@ -15,47 +13,39 @@ namespace CheatSheet.Menus
 		private int slotRows = 2;
 		internal List<PaintToolsSlot> slotList = new List<PaintToolsSlot>();
 
-		public PaintToolsView()
-		{
+		public PaintToolsView() {
 			base.Width = (PaintToolsSlot.slotSize + (float)this.slotSpace) * (float)this.slotColumns + (float)this.slotSpace + 20f;
 			base.Height = (PaintToolsSlot.slotSize + (float)this.slotSpace) * (float)this.slotRows + (float)this.slotSpace + 20f;
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
+		public override void Draw(SpriteBatch spriteBatch) {
 			base.Draw(spriteBatch);
 		}
 
-		public int Count
-		{
+		public int Count {
 			get { return slotList.Count; }
 		}
 
-		public void Add(PaintToolsSlot slot)
-		{
+		public void Add(PaintToolsSlot slot) {
 			slotList.Insert(0, slot);
 			slot.Select();
 			ReorderSlots();
 		}
 
-		public void AddEndDontSelect(PaintToolsSlot slot)
-		{
+		public void AddEndDontSelect(PaintToolsSlot slot) {
 			slotList.Add(slot);
 			//slot.Select();
 			ReorderSlots();
 		}
 
-		public void Add(PaintToolsSlot[] slots)
-		{
+		public void Add(PaintToolsSlot[] slots) {
 			slotList.InsertRange(0, slots);
 			slotList[0].Select();
 			ReorderSlots();
 		}
 
-		public void RemoveSelectedItem()
-		{
-			if (PaintToolsSlot.CurrentSelect != null)
-			{
+		public void RemoveSelectedItem() {
+			if (PaintToolsSlot.CurrentSelect != null) {
 				int index = slotList.IndexOf(PaintToolsSlot.CurrentSelect);
 				slotList.Remove(PaintToolsSlot.CurrentSelect);
 				PaintToolsSlot.CurrentSelect = null;
@@ -69,11 +59,9 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		public void RemoveAllOnline()
-		{
+		public void RemoveAllOnline() {
 			slotList.RemoveAll(x => x.browserID > 0);
-			if (!slotList.Contains(PaintToolsSlot.CurrentSelect))
-			{
+			if (!slotList.Contains(PaintToolsSlot.CurrentSelect)) {
 				PaintToolsSlot.CurrentSelect = null;
 				CheatSheet.instance.paintToolsHotbar.StampTiles = new TileData[0, 0];
 				CheatSheet.instance.paintToolsHotbar.stampInfo = null;
@@ -83,12 +71,10 @@ namespace CheatSheet.Menus
 			ReorderSlots();
 		}
 
-		public void ReorderSlots()
-		{
+		public void ReorderSlots() {
 			base.ScrollPosition = 0f;
 			base.ClearContent();
-			for (int i = 0; i < slotList.Count; i++)
-			{
+			for (int i = 0; i < slotList.Count; i++) {
 				int num = i;
 				PaintToolsSlot slot = this.slotList[num];
 				int num2 = i % this.slotColumns;

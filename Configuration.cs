@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
 namespace CheatSheet
@@ -15,8 +14,7 @@ namespace CheatSheet
 		internal static PersonalConfiguration personalConfiguration;
 		internal static ServerConfiguration serverConfiguration;
 
-		internal static void Initialized()
-		{
+		internal static void Initialized() {
 			personalConfiguration = new PersonalConfiguration();
 			// Reset?
 			Directory.CreateDirectory(Main.SavePath);
@@ -26,13 +24,11 @@ namespace CheatSheet
 					Path.DirectorySeparatorChar,
 					jsonDatabaseFilenamePersonal,
 				});
-			if (File.Exists(path))
-			{
-				using (StreamReader r = new StreamReader(path))
-				{
+			if (File.Exists(path)) {
+				using (StreamReader r = new StreamReader(path)) {
 					string json = r.ReadToEnd();
 					personalConfiguration = JsonConvert.DeserializeObject<PersonalConfiguration>(json, ConfigManager.serializerSettings);
-					if(personalConfiguration == null)
+					if (personalConfiguration == null)
 						personalConfiguration = new PersonalConfiguration();
 				}
 			}
@@ -45,10 +41,8 @@ namespace CheatSheet
 					Path.DirectorySeparatorChar,
 					jsonDatabaseFilenameServer,
 				});
-			if (File.Exists(path))
-			{
-				using (StreamReader r = new StreamReader(path))
-				{
+			if (File.Exists(path)) {
+				using (StreamReader r = new StreamReader(path)) {
 					string json = r.ReadToEnd();
 					serverConfiguration = JsonConvert.DeserializeObject<ServerConfiguration>(json, ConfigManager.serializerSettings);
 				}
@@ -56,8 +50,7 @@ namespace CheatSheet
 		}
 
 		// Saves personal settings, and if not client, saves serversettings too.
-		public static void SaveSetting()
-		{
+		public static void SaveSetting() {
 			Directory.CreateDirectory(Main.SavePath);
 			string path = string.Concat(new object[]
 				{
@@ -69,8 +62,7 @@ namespace CheatSheet
 			File.WriteAllText(path, json);
 
 			// If not MP client.
-			if (Main.netMode != 1)
-			{
+			if (Main.netMode != 1) {
 				Directory.CreateDirectory(Main.SavePath);
 				path = string.Concat(new object[]
 					{
@@ -125,14 +117,11 @@ namespace CheatSheet
 
 	internal class ServerConfiguration
 	{
-		public NPCDefinition[] BannedNPCs
-		{
-			get
-			{
+		public NPCDefinition[] BannedNPCs {
+			get {
 				return Menus.NPCBrowser.filteredNPCSlots.Select(type => new NPCDefinition(type)).ToArray();
 			}
-			set
-			{
+			set {
 				// This will forget unloaded modnpc.
 				List<int> loaded = value.Where(x => x != null && x.Mod != null && !x.IsUnloaded).Select(npc => npc.Type).Distinct().ToList();
 				Menus.NPCBrowser.filteredNPCSlots = loaded;

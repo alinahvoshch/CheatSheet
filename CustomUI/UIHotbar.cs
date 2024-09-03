@@ -9,8 +9,7 @@ namespace CheatSheet.CustomUI
 	//
 	internal class UIHotbar : UIWindow
 	{
-		internal RasterizerState _rasterizerState = new RasterizerState
-		{
+		internal RasterizerState _rasterizerState = new RasterizerState {
 			ScissorTestEnable = true
 		};
 
@@ -19,28 +18,22 @@ namespace CheatSheet.CustomUI
 
 		internal UIHotbar parentHotbar;
 
-		internal float shownPosition
-		{
-			get
-			{
+		internal float shownPosition {
+			get {
 				return (float)Main.screenHeight - base.Height * 2 - 12f + 6;
 			}
 		}
 
-		internal float hiddenPosition
-		{
-			get
-			{
-				if (parentHotbar != null && parentHotbar.Position.Y == parentHotbar.shownPosition)
-				{
+		internal float hiddenPosition {
+			get {
+				if (parentHotbar != null && parentHotbar.Position.Y == parentHotbar.shownPosition) {
 					return (float)Main.screenHeight - base.Height - 12f;
 				}
 				//else if (mod.hotbar != null && !mod.hotbar.hidden && hidden)
 				//{
 				//	return (float)Main.screenHeight - base.Height - 12f;
 				//}
-				else
-				{
+				else {
 					return (float)Main.screenHeight;
 				}
 			}
@@ -53,17 +46,13 @@ namespace CheatSheet.CustomUI
 
 		private bool _selected;
 
-		internal bool selected
-		{
+		internal bool selected {
 			get { return _selected; }
-			set
-			{
-				if (value == false)
-				{
+			set {
+				if (value == false) {
 					hidden = true;
 				}
-				else
-				{
+				else {
 					hidden = false;
 					Visible = true;
 				}
@@ -76,15 +65,11 @@ namespace CheatSheet.CustomUI
 		internal static Color buttonSelectedColor = Color.White;
 		internal static Color buttonSelectedHiddenColor = Color.Blue;
 
-		internal void DoSlideMovement()
-		{
-			if (!arrived)
-			{
-				if (this.hidden)
-				{
+		internal void DoSlideMovement() {
+			if (!arrived) {
+				if (this.hidden) {
 					this.lerpAmount -= .01f * slideMoveSpeed;
-					if (this.lerpAmount < 0f)
-					{
+					if (this.lerpAmount < 0f) {
 						this.lerpAmount = 0f;
 						arrived = true;
 						this.Visible = false;
@@ -92,11 +77,9 @@ namespace CheatSheet.CustomUI
 					float y = MathHelper.SmoothStep(this.hiddenPosition, this.shownPosition, this.lerpAmount);
 					base.Position = new Vector2(Hotbar.xPosition, y);
 				}
-				else
-				{
+				else {
 					this.lerpAmount += .01f * slideMoveSpeed;
-					if (this.lerpAmount > 1f)
-					{
+					if (this.lerpAmount > 1f) {
 						this.lerpAmount = 1f;
 						arrived = true;
 					}

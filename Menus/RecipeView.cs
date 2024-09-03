@@ -25,17 +25,13 @@ namespace CheatSheet.Menus
 
 		private int slotRows = 6;
 
-		public int[] selectedCategory
-		{
-			get
-			{
+		public int[] selectedCategory {
+			get {
 				return this._selectedCategory;
 			}
-			set
-			{
+			set {
 				List<int> list = value.ToList<int>();
-				for (int i = 0; i < list.Count; i++)
-				{
+				for (int i = 0; i < list.Count; i++) {
 					//NPCSlot slot = this.allNPCSlot[list[i]];
 					//if (slot.npcType == 0)
 					//{
@@ -47,36 +43,29 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		public RecipeView()
-		{
+		public RecipeView() {
 			base.Width = (this.slotSize + (float)this.slotSpace) * (float)this.slotColumns + (float)this.slotSpace + 20f;
 			base.Height = 200f;
 			this.allRecipeSlot = new RecipeSlot[Recipe.numRecipes];
-			for (int i = 0; i < this.allRecipeSlot.Length; i++)
-			{
+			for (int i = 0; i < this.allRecipeSlot.Length; i++) {
 				this.allRecipeSlot[i] = new RecipeSlot(i);
 			}
 			//	this.allNPCSlot = (from s in this.allNPCSlot
 			//					   select s).ToArray<NPCSlot>();
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
+		public override void Draw(SpriteBatch spriteBatch) {
 			base.Draw(spriteBatch);
 		}
 
-		public void ReorderSlots()
-		{
+		public void ReorderSlots() {
 			int type = 0;
 			List<int> groups = new List<int>();
-			if (RecipeBrowserWindow.lookupItemSlot.item.stack > 0)
-			{
+			if (RecipeBrowserWindow.lookupItemSlot.item.stack > 0) {
 				type = RecipeBrowserWindow.lookupItemSlot.item.type;
 
-				foreach (var group in RecipeGroup.recipeGroups)
-				{
-					if (group.Value.ValidItems.Contains(type))
-					{
+				foreach (var group in RecipeGroup.recipeGroups) {
+					if (group.Value.ValidItems.Contains(type)) {
 						groups.Add(group.Key);
 					}
 				}
@@ -85,16 +74,14 @@ namespace CheatSheet.Menus
 			base.ScrollPosition = 0f;
 			base.ClearContent();
 			int slotNum = 0;
-			for (int i = 0; i < this.activeSlots.Length; i++)
-			{
-				if (type != 0)
-				{
+			for (int i = 0; i < this.activeSlots.Length; i++) {
+				if (type != 0) {
 					Recipe curRecipe = allRecipeSlot[activeSlots[i]].recipe;
 					//Main.NewText("Recipe " + i);
 					// if my item is in a recipe group, i should add that to required items.
 					bool inGroup = allRecipeSlot[activeSlots[i]].recipe.acceptedGroups.Intersect(groups).Any();
 
-			//		inGroup |= curRecipe.useWood(type, type) || curRecipe.useSand(type, type) || curRecipe.useFragment(type, type) || curRecipe.useIronBar(type, type) || curRecipe.usePressurePlate(type, type);
+					//		inGroup |= curRecipe.useWood(type, type) || curRecipe.useSand(type, type) || curRecipe.useFragment(type, type) || curRecipe.useIronBar(type, type) || curRecipe.usePressurePlate(type, type);
 
 					//if (inGroup)
 					//{
@@ -104,11 +91,9 @@ namespace CheatSheet.Menus
 					//	}
 					//}
 
-					if (!inGroup)
-					{
+					if (!inGroup) {
 						// contine if neither result or ingredients contains item
-						if (!(allRecipeSlot[activeSlots[i]].recipe.createItem.type == type || allRecipeSlot[activeSlots[i]].recipe.requiredItem.Any(ing => ing.type == type)))
-						{
+						if (!(allRecipeSlot[activeSlots[i]].recipe.createItem.type == type || allRecipeSlot[activeSlots[i]].recipe.requiredItem.Any(ing => ing.type == type))) {
 							continue;
 						}
 					}

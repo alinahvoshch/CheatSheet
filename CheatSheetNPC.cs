@@ -9,12 +9,10 @@ namespace CheatSheet
 		public bool isFiltered = false;
 		public override bool InstancePerEntity => true;
 
-		public override bool PreAI(NPC npc)
-		{
+		public override bool PreAI(NPC npc) {
 			//Main.NewText("using " + npc.ToString());
 
-			if (NPCBrowser.filteredNPCSlots.Contains(npc.netID)/* || NPCBrowser.filteredNPCSlots.Contains(npc.type)*/)
-			{
+			if (NPCBrowser.filteredNPCSlots.Contains(npc.netID)/* || NPCBrowser.filteredNPCSlots.Contains(npc.type)*/) {
 				//NPCSlot.HandleFilterNPC(npc.whoAmI);
 				isFiltered = true;
 				int life = npc.life;
@@ -33,8 +31,7 @@ namespace CheatSheet
 			return base.PreAI(npc);
 		}
 
-		public override bool PreKill(NPC npc)
-		{
+		public override bool PreKill(NPC npc) {
 			return !isFiltered;
 		}
 

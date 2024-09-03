@@ -11,7 +11,6 @@ using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.Liquid;
 using Terraria.ID;
-using Terraria.ObjectData;
 
 namespace CheatSheet.Menus
 {
@@ -51,8 +50,7 @@ namespace CheatSheet.Menus
 
 		static MethodInfo GetTileDrawTextureMethodInfo;
 
-		public PaintToolsHotbar(CheatSheet mod)
-		{
+		public PaintToolsHotbar(CheatSheet mod) {
 			this.mod = mod;
 			//parentHotbar = mod.hotbar;
 
@@ -90,51 +88,40 @@ namespace CheatSheet.Menus
 			//		this.bDecreaseBrushSize.onLeftClick += (s, e) => brushSize = Math.Max(1, brushSize - 1);
 			bStampTiles.onLeftClick += new EventHandler(this.bTogglePaintTiles_onLeftClick);
 			bEyeDropper.onLeftClick += new EventHandler(this.bToggleEyeDropper_onLeftClick);
-			bFlipVertical.onLeftClick += (s, e) =>
-			{
-				for (int i = 0; i < StampTiles.GetLength(0); i++)
-				{
-					for (int j = 0; j < StampTiles.GetLength(1) / 2; j++)
-					{
+			bFlipVertical.onLeftClick += (s, e) => {
+				for (int i = 0; i < StampTiles.GetLength(0); i++) {
+					for (int j = 0; j < StampTiles.GetLength(1) / 2; j++) {
 						Utils.Swap(ref StampTiles[i, j], ref StampTiles[i, StampTiles.GetLength(1) - 1 - j]);
 					}
 				}
-				if (stampInfo != null)
-				{
+				if (stampInfo != null) {
 					stampInfo.bFlipVertical = !stampInfo.bFlipVertical;
 				}
 			};
 			bUndo.onLeftClick += (a, b) => bUndo_onClick(false);
 			bUndo.onRightClick += (a, b) => bUndo_onClick(true);
-			bFlipHorizontal.onLeftClick += (s, e) =>
-			{
-				for (int j = 0; j < StampTiles.GetLength(1); j++)
-				{
-					for (int i = 0; i < StampTiles.GetLength(0) / 2; i++)
-					{
+			bFlipHorizontal.onLeftClick += (s, e) => {
+				for (int j = 0; j < StampTiles.GetLength(1); j++) {
+					for (int i = 0; i < StampTiles.GetLength(0) / 2; i++) {
 						Utils.Swap(ref StampTiles[i, j], ref StampTiles[StampTiles.GetLength(0) - 1 - i, j]);
 					}
 				}
-				if (stampInfo != null)
-				{
+				if (stampInfo != null) {
 					stampInfo.bFlipHorizontal = !stampInfo.bFlipHorizontal;
 				}
 			};
 			bToggleTransparentSelection.onLeftClick += (s, e) => { TransparentSelectionEnabled = !TransparentSelectionEnabled; bToggleTransparentSelection.Tooltip = TransparentSelectionEnabled ? CSText("TransparentSelectionOn") : CSText("TransparentSelectionOff"); };
 
-			onMouseDown += (s, e) =>
-			{
-				if (!Main.LocalPlayer.mouseInterface && !mod.hotbar.MouseInside && !mod.hotbar.button.MouseInside && !UIView.MouseRightButton)
-				{
+			onMouseDown += (s, e) => {
+				if (!Main.LocalPlayer.mouseInterface && !mod.hotbar.MouseInside && !mod.hotbar.button.MouseInside && !UIView.MouseRightButton) {
 					leftMouseDown = true;
 					Main.LocalPlayer.mouseInterface = true;
 				}
 			};
-			onMouseUp += (s, e) =>
-			{
-				if (!Main.LocalPlayer.mouseInterface && !mod.hotbar.MouseInside && !mod.hotbar.button.MouseInside && (!UIView.MousePrevRightButton || (UIView.MousePrevLeftButton && !UIView.MouseLeftButton)))
-				{
-					justLeftMouseDown = true; leftMouseDown = false; /*startTileX = -1; startTileY = -1;*/
+			onMouseUp += (s, e) => {
+				if (!Main.LocalPlayer.mouseInterface && !mod.hotbar.MouseInside && !mod.hotbar.button.MouseInside && (!UIView.MousePrevRightButton || (UIView.MousePrevLeftButton && !UIView.MouseLeftButton))) {
+					justLeftMouseDown = true;
+					leftMouseDown = false; /*startTileX = -1; startTileY = -1;*/
 				}
 			};
 
@@ -157,8 +144,7 @@ namespace CheatSheet.Menus
 			base.Position = new Vector2(Hotbar.xPosition, this.hiddenPosition);
 			base.CenterXAxisToParentCenter();
 			float num = this.spacing;
-			for (int i = 0; i < this.buttonView.children.Count; i++)
-			{
+			for (int i = 0; i < this.buttonView.children.Count; i++) {
 				this.buttonView.children[i].Anchor = AnchorPosition.Left;
 				this.buttonView.children[i].Position = new Vector2(num, 0f);
 				this.buttonView.children[i].CenterYAxisToParentCenter();
@@ -169,50 +155,39 @@ namespace CheatSheet.Menus
 			this.Resize();
 		}
 
-		private void bUndo_onClick(bool right)
-		{
-			if (UndoHistory.Count == 0)
-			{
+		private void bUndo_onClick(bool right) {
+			if (UndoHistory.Count == 0) {
 				Main.NewText(CSText("NoUndo"));
 				return;
 			}
-			if (right)
-			{
-				for (int i = 0; i < 10; i++)
-				{
+			if (right) {
+				for (int i = 0; i < 10; i++) {
 					Undo();
 					if (UndoHistory.Count == 0)
 						break;
 				}
 			}
-			else
-			{
+			else {
 				Undo();
 			}
 			//if (UndoHistory.Count > 0)
 			Main.NewText(UndoHistory.Count + " " + CSText("UndoLeft"));
 		}
 
-		private void Undo()
-		{
-			if (UndoHistory.Count == 0)
-			{
+		private void Undo() {
+			if (UndoHistory.Count == 0) {
 				//Main.NewText("There are no actions left in history to undo.");
 			}
-			else
-			{
+			else {
 				var HistoryItem = UndoHistory.Pop();
 				UpdateUndoTooltip();
 				Point UndoOrigin = HistoryItem.Item1;
 				TileData[,] UndoTiles = HistoryItem.Item2;
 				int width = UndoTiles.GetLength(0);
 				int height = UndoTiles.GetLength(1);
-				for (int x = 0; x < width; x++)
-				{
-					for (int y = 0; y < height; y++)
-					{
-						if (WorldGen.InWorld(x + UndoOrigin.X, y + UndoOrigin.Y) && UndoTiles[x, y] != null)
-						{
+				for (int x = 0; x < width; x++) {
+					for (int y = 0; y < height; y++) {
+						if (WorldGen.InWorld(x + UndoOrigin.X, y + UndoOrigin.Y) && UndoTiles[x, y] != null) {
 							//Tile target = Framing.GetTileSafely(x + UndoOrigin.X, y + UndoOrigin.Y);
 							//target.CopyFrom(UndoTiles[x, y]);
 							//Main.tile[x + UndoOrigin.X, y + UndoOrigin.Y] = UndoTiles[x, y];
@@ -220,29 +195,25 @@ namespace CheatSheet.Menus
 						}
 					}
 				}
-				if (Main.netMode == 1)
-				{
+				if (Main.netMode == 1) {
 					NetMessage.SendTileSquare(-1, UndoOrigin.X + width / 2, UndoOrigin.Y + height / 2, Math.Max(width, height));
 				}
 			}
 		}
 
-		internal void UpdateUndoTooltip()
-		{
+		internal void UpdateUndoTooltip() {
 			bUndo.Tooltip = CSText("Undo") + " " + UndoHistory.Count + " " + CSText("Undo2");
 		}
 
-		protected override bool IsMouseInside()
-		{
+		protected override bool IsMouseInside() {
 			//if (hidden) return false;
-			if (EyeDropperActive || StampToolActive) return true;
+			if (EyeDropperActive || StampToolActive)
+				return true;
 			return base.IsMouseInside();
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			if (Visible)
-			{
+		public override void Draw(SpriteBatch spriteBatch) {
+			if (Visible) {
 				spriteBatch.End();
 				spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, this._rasterizerState, null, Main.UIScaleMatrix);
 				//	Rectangle scissorRectangle = new Rectangle((int)base.X- (int)base.Width, (int)base.Y, (int)base.Width, (int)base.Height);
@@ -290,49 +261,39 @@ namespace CheatSheet.Menus
 
 			//	base.Draw(spriteBatch);
 
-			if (Visible && (base.IsMouseInside() /*|| button.MouseInside*/))
-			{
+			if (Visible && (base.IsMouseInside() /*|| button.MouseInside*/)) {
 				Main.LocalPlayer.mouseInterface = true;
 				//Main.LocalPlayer.showItemIcon = false;
 			}
 
-			if (Visible && IsMouseInside())
-			{
+			if (Visible && IsMouseInside()) {
 				Main.LocalPlayer.mouseInterface = true;
-				if (UIView.MouseRightButton)
-				{
+				if (UIView.MouseRightButton) {
 					Main.LocalPlayer.mouseInterface = false;
 				}
 			}
 
 			float x = FontAssets.MouseText.Value.MeasureString(UIView.HoverText).X;
 			Vector2 vector = new Vector2((float)Main.mouseX, (float)Main.mouseY) + new Vector2(16f);
-			if (vector.Y > (float)(Main.screenHeight - 30))
-			{
+			if (vector.Y > (float)(Main.screenHeight - 30)) {
 				vector.Y = (float)(Main.screenHeight - 30);
 			}
-			if (vector.X > (float)Main.screenWidth - x)
-			{
+			if (vector.X > (float)Main.screenWidth - x) {
 				vector.X = (float)(Main.screenWidth - 460);
 			}
 			Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.MouseText.Value, UIView.HoverText, vector.X, vector.Y, new Color((int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor), Color.Black, Vector2.Zero, 1f);
 		}
 
-		public void DrawGameScale(SpriteBatch spriteBatch)
-		{
-			try
-			{
-				if (Visible && !base.IsMouseInside() && (StampToolActive || EyeDropperActive))
-				{
-					if (!Main.LocalPlayer.mouseInterface)
-					{
+		public void DrawGameScale(SpriteBatch spriteBatch) {
+			try {
+				if (Visible && !base.IsMouseInside() && (StampToolActive || EyeDropperActive)) {
+					if (!Main.LocalPlayer.mouseInterface) {
 						DrawBrush();
 
 						Terraria.GameInput.PlayerInput.LockVanillaMouseScroll("CheatSheet/DrawBrush");
 
-						if(Terraria.GameInput.PlayerInput.ScrollWheelDeltaForUI != 0)
-						{
-							if(Terraria.GameInput.PlayerInput.ScrollWheelDeltaForUI < 0)
+						if (Terraria.GameInput.PlayerInput.ScrollWheelDeltaForUI != 0) {
+							if (Terraria.GameInput.PlayerInput.ScrollWheelDeltaForUI < 0)
 								CheatSheet.instance.paintToolsUI.btnSnap.NextIamge();
 							else
 								CheatSheet.instance.paintToolsUI.btnSnap.PrevIamge();
@@ -340,14 +301,12 @@ namespace CheatSheet.Menus
 					}
 				}
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				System.Diagnostics.Debug.WriteLine(ex.Message);
 			}
 		}
 
-		internal static Color buffColor(Color newColor, float R, float G, float B, float A)
-		{
+		internal static Color buffColor(Color newColor, float R, float G, float B, float A) {
 			newColor.R = (byte)((float)newColor.R * R);
 			newColor.G = (byte)((float)newColor.G * G);
 			newColor.B = (byte)((float)newColor.B * B);
@@ -355,19 +314,15 @@ namespace CheatSheet.Menus
 			return newColor;
 		}
 
-		private void DrawBrush()
-		{
-			if (EyeDropperActive)
-			{
+		private void DrawBrush() {
+			if (EyeDropperActive) {
 				Vector2 upperLeft;
 				Vector2 lowerRight;
-				if (leftMouseDown)
-				{
+				if (leftMouseDown) {
 					upperLeft = new Vector2(Math.Min(startTileX, lastMouseTileX), Math.Min(startTileY, lastMouseTileY));
 					lowerRight = new Vector2(Math.Max(startTileX, lastMouseTileX) + 1, Math.Max(startTileY, lastMouseTileY) + 1);
 				}
-				else
-				{
+				else {
 					upperLeft = Main.MouseWorld.ToTileCoordinates().ToVector2();
 					lowerRight = upperLeft.Offset(1, 1);
 				}
@@ -375,8 +330,7 @@ namespace CheatSheet.Menus
 				Vector2 lowerRightScreen = lowerRight * 16f;
 				upperLeftScreen -= Main.screenPosition;
 				lowerRightScreen -= Main.screenPosition;
-				if (Main.LocalPlayer.gravDir == -1f)
-				{
+				if (Main.LocalPlayer.gravDir == -1f) {
 					upperLeftScreen.Y = (float)Main.screenHeight - upperLeftScreen.Y;// - 16f;
 					lowerRightScreen.Y = (float)Main.screenHeight - lowerRightScreen.Y;// - 16f;
 
@@ -385,14 +339,12 @@ namespace CheatSheet.Menus
 
 				DrawSelectedRectangle(upperLeftScreen, lowerRight - upperLeft, 1f, leftMouseDown);
 			}
-			else if (StampToolActive && stampInfo != null)
-			{
+			else if (StampToolActive && stampInfo != null) {
 				int width = StampTiles.GetLength(0);
 				int height = StampTiles.GetLength(1);
 				Vector2 vector = Snap.GetSnapPosition(CheatSheet.instance.paintToolsUI.SnapType, width, height, constrainToAxis, constrainedX, constrainedY, false);
 
-				if (!leftMouseDown && !Main.LocalPlayer.mouseInterface)
-				{
+				if (!leftMouseDown && !Main.LocalPlayer.mouseInterface) {
 					DrawPreview(Main.spriteBatch, stampInfo.Tiles, vector);
 				}
 
@@ -400,8 +352,7 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		private void DrawSelectedRectangle(Vector2 upperLeftScreen, Vector2 brushSize, float r, bool drawBack = true)
-		{
+		private void DrawSelectedRectangle(Vector2 upperLeftScreen, Vector2 brushSize, float r, bool drawBack = true) {
 			Rectangle value = new Rectangle(0, 0, 1, 1);
 			//float r = 1f;
 			float g = 0.9f;
@@ -409,8 +360,7 @@ namespace CheatSheet.Menus
 			float a = 1f;
 			float scale = 0.6f;
 			Color color = buffColor(Color.White, r, g, b, a);
-			if (drawBack)
-			{
+			if (drawBack) {
 				Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, upperLeftScreen, new Microsoft.Xna.Framework.Rectangle?(value), color * scale, 0f, Vector2.Zero, 16f * brushSize, SpriteEffects.None, 0f);
 			}
 			b = 0.3f;
@@ -426,36 +376,28 @@ namespace CheatSheet.Menus
 			Utils.DrawBorderStringFourWay(Main.spriteBatch, FontAssets.MouseText.Value, $"{brushSize.X} x {brushSize.Y}", pos.X, pos.Y, Color.White, Color.Black, Vector2.Zero, 1f);
 		}
 
-		private void bToggleEyeDropper_onLeftClick(object sender, EventArgs e)
-		{
+		private void bToggleEyeDropper_onLeftClick(object sender, EventArgs e) {
 			UIImage uIImage = (UIImage)sender;
-			if (EyeDropperActive)
-			{
+			if (EyeDropperActive) {
 				DisableAllWindows();
 			}
-			else
-			{
+			else {
 				DisableAllWindows();
 				EyeDropperActive = true;
 				uIImage.ForegroundColor = buttonSelectedColor;
 			}
 		}
 
-		private void bTogglePaintTiles_onLeftClick(object sender, EventArgs e)
-		{
-			if (stampInfo == null || StampTiles.GetLength(0) == 0)
-			{
+		private void bTogglePaintTiles_onLeftClick(object sender, EventArgs e) {
+			if (stampInfo == null || StampTiles.GetLength(0) == 0) {
 				Main.NewText(CSText("PriorBrush"));
 			}
-			else
-			{
+			else {
 				UIImage uIImage = (UIImage)sender;
-				if (StampToolActive)
-				{
+				if (StampToolActive) {
 					DisableAllWindows();
 				}
-				else
-				{
+				else {
 					DisableAllWindows();
 					StampToolActive = true;
 					uIImage.ForegroundColor = buttonSelectedColor;
@@ -463,8 +405,7 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		private void DisableAllWindows()
-		{
+		private void DisableAllWindows() {
 			bStampTiles.ForegroundColor = buttonUnselectedColor;
 			bEyeDropper.ForegroundColor = buttonUnselectedColor;
 			StampToolActive = false;
@@ -472,44 +413,35 @@ namespace CheatSheet.Menus
 			startTileX = startTileY = lastMouseTileX = lastMouseTileY = -1;
 		}
 
-		public override void Update()
-		{
+		public override void Update() {
 			DoSlideMovement();
 			base.CenterXAxisToParentCenter();
 			base.Update();
 		}
 
-		public void UpdateGameScale()
-		{
-			try
-			{
+		public void UpdateGameScale() {
+			try {
 				Update2();
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				System.Diagnostics.Debug.WriteLine(ex.Message);
 			}
 		}
 
-		public void Update2()
-		{
+		public void Update2() {
 			Player player = Main.LocalPlayer;
-			if (selected && (EyeDropperActive || StampToolActive))
-			{
+			if (selected && (EyeDropperActive || StampToolActive)) {
 				//			player.mouseInterface = true;
 				//			player.showItemIcon = true;
-				if (EyeDropperActive)
-				{
+				if (EyeDropperActive) {
 					//		Main.LocalPlayer.showItemIconText = "Click to select pallete";
 					player.cursorItemIconID = ItemID.EmptyDropper;
-					if (leftMouseDown)
-					{
+					if (leftMouseDown) {
 						Point point = (Main.MouseWorld).ToTileCoordinates();
 						//Point point = (Main.MouseWorld + (brushSize % 2 == 0 ? Vector2.One * 8 : Vector2.Zero)).ToTileCoordinates();
 						//point.X -= brushSize / 2;
 						//point.Y -= brushSize / 2;
-						if (startTileX == -1)
-						{
+						if (startTileX == -1) {
 							startTileX = point.X;
 							startTileY = point.Y;
 							lastMouseTileX = -1;
@@ -534,10 +466,8 @@ namespace CheatSheet.Menus
 							lastMouseTileY = point.Y;
 						}
 					}
-					if (justLeftMouseDown)
-					{
-						if (startTileX != -1 && startTileY != -1 && lastMouseTileX != -1 && lastMouseTileY != -1)
-						{
+					if (justLeftMouseDown) {
+						if (startTileX != -1 && startTileY != -1 && lastMouseTileX != -1 && lastMouseTileY != -1) {
 							Vector2 upperLeft = new Vector2(Math.Min(startTileX, lastMouseTileX), Math.Min(startTileY, lastMouseTileY));
 							Vector2 lowerRight = new Vector2(Math.Max(startTileX, lastMouseTileX), Math.Max(startTileY, lastMouseTileY));
 
@@ -550,29 +480,21 @@ namespace CheatSheet.Menus
 
 							StampTiles = new TileData[maxX - minX, maxY - minY];
 
-							for (int i = 0; i < maxX - minX; i++)
-							{
-								for (int j = 0; j < maxY - minY; j++)
-								{
+							for (int i = 0; i < maxX - minX; i++) {
+								for (int j = 0; j < maxY - minY; j++) {
 									StampTiles[i, j] = new TileData();
 								}
 							}
 
-							for (int x = minX; x < maxX; x++)
-							{
-								for (int y = minY; y < maxY; y++)
-								{
-									if (WorldGen.InWorld(x, y))
-									{
-										if (Main.tile[x, y].TileType == TileID.Count)
-										{
+							for (int x = minX; x < maxX; x++) {
+								for (int y = minY; y < maxY; y++) {
+									if (WorldGen.InWorld(x, y)) {
+										if (Main.tile[x, y].TileType == TileID.Count) {
 										}
-										if (Main.tile[x, y].HasTile)
-										{
+										if (Main.tile[x, y].HasTile) {
 											WorldGen.TileFrame(x, y, true, false);
 										}
-										if (Main.tile[x, y].WallType > 0)
-										{
+										if (Main.tile[x, y].WallType > 0) {
 											Framing.WallFrame(x, y, true);
 										}
 
@@ -599,12 +521,10 @@ namespace CheatSheet.Menus
 						justLeftMouseDown = false;
 					}
 				}
-				if (StampToolActive)
-				{
+				if (StampToolActive) {
 					player.cursorItemIconID = ItemID.Paintbrush;
 					//		Main.LocalPlayer.showItemIconText = "Click to paint";
-					if (leftMouseDown && stampInfo != null)
-					{
+					if (leftMouseDown && stampInfo != null) {
 						int width = StampTiles.GetLength(0);
 						int height = StampTiles.GetLength(1);
 						//Vector2 brushsize = new Vector2(width, height);
@@ -630,45 +550,36 @@ namespace CheatSheet.Menus
 
 						Point point = Snap.GetSnapPosition(CheatSheet.instance.paintToolsUI.SnapType, width, height, constrainToAxis, constrainedX, constrainedY, true).ToPoint();
 
-						if (startTileX == -1)
-						{
+						if (startTileX == -1) {
 							startTileX = point.X;
 							startTileY = point.Y;
 							lastMouseTileX = -1;
 							lastMouseTileY = -1;
 						}
 
-						if (Main.keyState.IsKeyDown(Keys.LeftShift))
-						{
+						if (Main.keyState.IsKeyDown(Keys.LeftShift)) {
 							constrainToAxis = true;
-							if (constrainedStartX == -1 && constrainedStartY == -1)
-							{
+							if (constrainedStartX == -1 && constrainedStartY == -1) {
 								constrainedStartX = point.X;
 								constrainedStartY = point.Y;
 							}
 
-							if (constrainedX == -1 && constrainedY == -1)
-							{
-								if (constrainedStartX != point.X)
-								{
+							if (constrainedX == -1 && constrainedY == -1) {
+								if (constrainedStartX != point.X) {
 									constrainedY = point.Y;
 								}
-								else if (constrainedStartY != point.Y)
-								{
+								else if (constrainedStartY != point.Y) {
 									constrainedX = point.X;
 								}
 							}
-							if (constrainedX != -1)
-							{
+							if (constrainedX != -1) {
 								point.X = constrainedX;
 							}
-							if (constrainedY != -1)
-							{
+							if (constrainedY != -1) {
 								point.Y = constrainedY;
 							}
 						}
-						else
-						{
+						else {
 							constrainToAxis = false;
 							constrainedX = -1;
 							constrainedY = -1;
@@ -676,33 +587,27 @@ namespace CheatSheet.Menus
 							constrainedStartY = -1;
 						}
 
-						if (lastMouseTileX != point.X || lastMouseTileY != point.Y)
-						{
+						if (lastMouseTileX != point.X || lastMouseTileY != point.Y) {
 							lastMouseTileX = point.X;
 							lastMouseTileY = point.Y;
 							//Main.NewText("StartTileX " + startTileX);
 							UndoHistory.Push(Tuple.Create(point, new TileData[width, height]));
 							UpdateUndoTooltip();
-							for (int x = 0; x < width; x++)
-							{
-								for (int y = 0; y < height; y++)
-								{
-									if (WorldGen.InWorld(x + point.X, y + point.Y) && StampTiles[x, y] != null)
-									{
+							for (int x = 0; x < width; x++) {
+								for (int y = 0; y < height; y++) {
+									if (WorldGen.InWorld(x + point.X, y + point.Y) && StampTiles[x, y] != null) {
 										Tile target = Framing.GetTileSafely(x + point.X, y + point.Y);
 										UndoHistory.Peek().Item2[x, y] = new TileData(target);
 										int cycledX = ((x + point.X - startTileX) % width + width) % width;
 										int cycledY = ((y + point.Y - startTileY) % height + height) % height;
 										if (TransparentSelectionEnabled) // What about just walls?
 										{
-											if (StampTiles[cycledX, cycledY].TileWallWireStateData.HasTile)
-											{
+											if (StampTiles[cycledX, cycledY].TileWallWireStateData.HasTile) {
 												//target.CopyFrom(StampTiles[cycledX, cycledY]);
 												StampTiles[cycledX, cycledY].CopyToTile(target);
 											}
 										}
-										else
-										{
+										else {
 											//target.CopyFrom(StampTiles[cycledX, cycledY]);
 											StampTiles[cycledX, cycledY].CopyToTile(target);
 										}
@@ -711,25 +616,20 @@ namespace CheatSheet.Menus
 							}
 							// TODO: Experiment with WorldGen.stopDrops = true;
 							// TODO: Button to ignore TileFrame?
-							for (int i = point.X; i < point.X + width; i++)
-							{
-								for (int j = 0; j < point.Y + height; j++)
-								{
+							for (int i = point.X; i < point.X + width; i++) {
+								for (int j = 0; j < point.Y + height; j++) {
 									WorldGen.SquareTileFrame(i, j, false); // Need to do this after stamp so neighbors are correct.
-									if (Main.netMode == 1 && Framing.GetTileSafely(i, j).LiquidAmount > 0)
-									{
+									if (Main.netMode == 1 && Framing.GetTileSafely(i, j).LiquidAmount > 0) {
 										NetMessage.sendWater(i, j); // Does it matter that this is before sendtilesquare?
 									}
 								}
 							}
-							if (Main.netMode == 1)
-							{
+							if (Main.netMode == 1) {
 								NetMessage.SendTileSquare(-1, point.X + width / 2, point.Y + height / 2, Math.Max(width, height));
 							}
 						}
 					}
-					else
-					{
+					else {
 						startTileX = -1;
 						startTileY = -1;
 						constrainToAxis = false;
@@ -766,13 +666,10 @@ namespace CheatSheet.Menus
 		//	}
 		//}
 
-		public void Resize()
-		{
+		public void Resize() {
 			float num = this.spacing;
-			for (int i = 0; i < this.buttonView.children.Count; i++)
-			{
-				if (this.buttonView.children[i].Visible)
-				{
+			for (int i = 0; i < this.buttonView.children.Count; i++) {
+				if (this.buttonView.children[i].Visible) {
 					this.buttonView.children[i].X = num;
 					num += this.buttonView.children[i].Width + this.spacing;
 				}
@@ -789,8 +686,7 @@ namespace CheatSheet.Menus
 		private int constrainedStartX;
 		private int constrainedStartY;
 
-		public void Hide()
-		{
+		public void Hide() {
 			preHideEyeDropper = EyeDropperActive;
 			preHidePaintTiles = StampToolActive;
 
@@ -801,8 +697,7 @@ namespace CheatSheet.Menus
 			arrived = false;
 		}
 
-		public void Show()
-		{
+		public void Show() {
 			mod.hotbar.currentHotbar = this;
 			arrived = false;
 			hidden = false;
@@ -812,19 +707,15 @@ namespace CheatSheet.Menus
 			StampToolActive = preHidePaintTiles;
 		}
 
-		public static void DrawPreview(SpriteBatch sb, TileData[,] BrushTiles, Vector2 position, float scale = 1f)
-		{
+		public static void DrawPreview(SpriteBatch sb, TileData[,] BrushTiles, Vector2 position, float scale = 1f) {
 			Color color = Color.White;
 			color.A = 160;
 			int width = BrushTiles.GetLength(0);
 			int height = BrushTiles.GetLength(1);
-			for (int y = 0; y < height; y++)
-			{
-				for (int x = 0; x < width; x++)
-				{
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
 					TileData tile = BrushTiles[x, y];
-					if (tile.WallTypeData.Type > 0)
-					{
+					if (tile.WallTypeData.Type > 0) {
 						Main.instance.LoadWall(tile.WallTypeData.Type);
 						Texture2D textureWall;
 						//			if (PaintToolsEx.canDrawColorWall(tile) && tile.type < Main.wallAltTexture.GetLength(0) && Main.wallAltTexture[tile.type, tile.wallColor()] != null)
@@ -832,8 +723,7 @@ namespace CheatSheet.Menus
 						//			else
 						//				textureWall = TextureAssets.Wall[tile.wall].Value;
 
-						if (GetTileDrawTextureMethodInfo == null)
-						{
+						if (GetTileDrawTextureMethodInfo == null) {
 							GetTileDrawTextureMethodInfo = typeof(WallDrawing).GetMethod("GetTileDrawTexture", BindingFlags.Instance | BindingFlags.NonPublic);
 						}
 
@@ -848,8 +738,7 @@ namespace CheatSheet.Menus
 						Vector2 pos = position + new Vector2(x * 16 - 8, y * 16 - 8);
 						sb.Draw(textureWall, pos * scale, value, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 					}
-					if (tile.LiquidData.Amount > 14)
-					{
+					if (tile.LiquidData.Amount > 14) {
 						Texture2D textureWater;
 						if (tile.LiquidData.LiquidType == LiquidID.Honey)
 							textureWater = LiquidRenderer.Instance._liquidTextures[11].Value.Offset(16, 48, 16, 16);
@@ -878,10 +767,8 @@ namespace CheatSheet.Menus
 		// Copied from tmod since original code needs Tile instance
 		static FieldInfo _paintSystemFieldInfo;
 		static TilePaintSystemV2 _paintSystem;
-		private static Texture2D GetTileDrawTexture(TileData tile, int tileX, int tileY)
-		{
-			if (_paintSystemFieldInfo == null)
-			{
+		private static Texture2D GetTileDrawTexture(TileData tile, int tileX, int tileY) {
+			if (_paintSystemFieldInfo == null) {
 				_paintSystemFieldInfo = typeof(WallDrawing).GetField("_paintSystem", BindingFlags.Instance | BindingFlags.NonPublic);
 				_paintSystem = (TilePaintSystemV2)_paintSystemFieldInfo.GetValue(Main.instance.WallsRenderer);
 			}
@@ -929,163 +816,119 @@ namespace CheatSheet.Menus
 			}
 		}*/
 
-		public static void Smooth()
-		{
+		public static void Smooth() {
 			//progress.Message = Lang.gen[60];
-			for (int k = 20; k < Main.maxTilesX - 20; k++)
-			{
+			for (int k = 20; k < Main.maxTilesX - 20; k++) {
 				float value = (float)k / (float)Main.maxTilesX;
 				//progress.Set(value);
-				for (int l = 20; l < Main.maxTilesY - 20; l++)
-				{
-					if (Main.tile[k, l].TileType != 48 && Main.tile[k, l].TileType != 137 && Main.tile[k, l].TileType != 232 && Main.tile[k, l].TileType != 191 && Main.tile[k, l].TileType != 151 && Main.tile[k, l].TileType != 274)
-					{
-						if (!Main.tile[k, l - 1].HasTile)
-						{
-							if (WorldGen.SolidTile(k, l) && TileID.Sets.CanBeClearedDuringGeneration[(int)Main.tile[k, l].TileType])
-							{
-								if (!Main.tile[k - 1, l].IsHalfBlock && !Main.tile[k + 1, l].IsHalfBlock && Main.tile[k - 1, l].Slope == 0 && Main.tile[k + 1, l].Slope == 0)
-								{
-									if (WorldGen.SolidTile(k, l + 1))
-									{
-										if (!WorldGen.SolidTile(k - 1, l) && !Main.tile[k - 1, l + 1].IsHalfBlock && WorldGen.SolidTile(k - 1, l + 1) && WorldGen.SolidTile(k + 1, l) && !Main.tile[k + 1, l - 1].HasTile)
-										{
-											if (WorldGen.genRand.Next(2) == 0)
-											{
+				for (int l = 20; l < Main.maxTilesY - 20; l++) {
+					if (Main.tile[k, l].TileType != 48 && Main.tile[k, l].TileType != 137 && Main.tile[k, l].TileType != 232 && Main.tile[k, l].TileType != 191 && Main.tile[k, l].TileType != 151 && Main.tile[k, l].TileType != 274) {
+						if (!Main.tile[k, l - 1].HasTile) {
+							if (WorldGen.SolidTile(k, l) && TileID.Sets.CanBeClearedDuringGeneration[(int)Main.tile[k, l].TileType]) {
+								if (!Main.tile[k - 1, l].IsHalfBlock && !Main.tile[k + 1, l].IsHalfBlock && Main.tile[k - 1, l].Slope == 0 && Main.tile[k + 1, l].Slope == 0) {
+									if (WorldGen.SolidTile(k, l + 1)) {
+										if (!WorldGen.SolidTile(k - 1, l) && !Main.tile[k - 1, l + 1].IsHalfBlock && WorldGen.SolidTile(k - 1, l + 1) && WorldGen.SolidTile(k + 1, l) && !Main.tile[k + 1, l - 1].HasTile) {
+											if (WorldGen.genRand.Next(2) == 0) {
 												WorldGen.SlopeTile(k, l, 2);
 											}
-											else
-											{
+											else {
 												WorldGen.PoundTile(k, l);
 											}
 										}
-										else if (!WorldGen.SolidTile(k + 1, l) && !Main.tile[k + 1, l + 1].IsHalfBlock && WorldGen.SolidTile(k + 1, l + 1) && WorldGen.SolidTile(k - 1, l) && !Main.tile[k - 1, l - 1].HasTile)
-										{
-											if (WorldGen.genRand.Next(2) == 0)
-											{
+										else if (!WorldGen.SolidTile(k + 1, l) && !Main.tile[k + 1, l + 1].IsHalfBlock && WorldGen.SolidTile(k + 1, l + 1) && WorldGen.SolidTile(k - 1, l) && !Main.tile[k - 1, l - 1].HasTile) {
+											if (WorldGen.genRand.Next(2) == 0) {
 												WorldGen.SlopeTile(k, l, 1);
 											}
-											else
-											{
+											else {
 												WorldGen.PoundTile(k, l);
 											}
 										}
-										else if (WorldGen.SolidTile(k + 1, l + 1) && WorldGen.SolidTile(k - 1, l + 1) && !Main.tile[k + 1, l].HasTile && !Main.tile[k - 1, l].HasTile)
-										{
+										else if (WorldGen.SolidTile(k + 1, l + 1) && WorldGen.SolidTile(k - 1, l + 1) && !Main.tile[k + 1, l].HasTile && !Main.tile[k - 1, l].HasTile) {
 											WorldGen.PoundTile(k, l);
 										}
-										if (WorldGen.SolidTile(k, l))
-										{
-											if (WorldGen.SolidTile(k - 1, l) && WorldGen.SolidTile(k + 1, l + 2) && !Main.tile[k + 1, l].HasTile && !Main.tile[k + 1, l + 1].HasTile && !Main.tile[k - 1, l - 1].HasTile)
-											{
+										if (WorldGen.SolidTile(k, l)) {
+											if (WorldGen.SolidTile(k - 1, l) && WorldGen.SolidTile(k + 1, l + 2) && !Main.tile[k + 1, l].HasTile && !Main.tile[k + 1, l + 1].HasTile && !Main.tile[k - 1, l - 1].HasTile) {
 												WorldGen.KillTile(k, l, false, false, false);
 											}
-											else if (WorldGen.SolidTile(k + 1, l) && WorldGen.SolidTile(k - 1, l + 2) && !Main.tile[k - 1, l].HasTile && !Main.tile[k - 1, l + 1].HasTile && !Main.tile[k + 1, l - 1].HasTile)
-											{
+											else if (WorldGen.SolidTile(k + 1, l) && WorldGen.SolidTile(k - 1, l + 2) && !Main.tile[k - 1, l].HasTile && !Main.tile[k - 1, l + 1].HasTile && !Main.tile[k + 1, l - 1].HasTile) {
 												WorldGen.KillTile(k, l, false, false, false);
 											}
-											else if (!Main.tile[k - 1, l + 1].HasTile && !Main.tile[k - 1, l].HasTile && WorldGen.SolidTile(k + 1, l) && WorldGen.SolidTile(k, l + 2))
-											{
-												if (WorldGen.genRand.Next(5) == 0)
-												{
+											else if (!Main.tile[k - 1, l + 1].HasTile && !Main.tile[k - 1, l].HasTile && WorldGen.SolidTile(k + 1, l) && WorldGen.SolidTile(k, l + 2)) {
+												if (WorldGen.genRand.Next(5) == 0) {
 													WorldGen.KillTile(k, l, false, false, false);
 												}
-												else if (WorldGen.genRand.Next(5) == 0)
-												{
+												else if (WorldGen.genRand.Next(5) == 0) {
 													WorldGen.PoundTile(k, l);
 												}
-												else
-												{
+												else {
 													WorldGen.SlopeTile(k, l, 2);
 												}
 											}
-											else if (!Main.tile[k + 1, l + 1].HasTile && !Main.tile[k + 1, l].HasTile && WorldGen.SolidTile(k - 1, l) && WorldGen.SolidTile(k, l + 2))
-											{
-												if (WorldGen.genRand.Next(5) == 0)
-												{
+											else if (!Main.tile[k + 1, l + 1].HasTile && !Main.tile[k + 1, l].HasTile && WorldGen.SolidTile(k - 1, l) && WorldGen.SolidTile(k, l + 2)) {
+												if (WorldGen.genRand.Next(5) == 0) {
 													WorldGen.KillTile(k, l, false, false, false);
 												}
-												else if (WorldGen.genRand.Next(5) == 0)
-												{
+												else if (WorldGen.genRand.Next(5) == 0) {
 													WorldGen.PoundTile(k, l);
 												}
-												else
-												{
+												else {
 													WorldGen.SlopeTile(k, l, 1);
 												}
 											}
 										}
 									}
-									if (WorldGen.SolidTile(k, l) && !Main.tile[k - 1, l].HasTile && !Main.tile[k + 1, l].HasTile)
-									{
+									if (WorldGen.SolidTile(k, l) && !Main.tile[k - 1, l].HasTile && !Main.tile[k + 1, l].HasTile) {
 										WorldGen.KillTile(k, l, false, false, false);
 									}
 								}
 							}
-							else if (!Main.tile[k, l].HasTile && Main.tile[k, l + 1].TileType != 151 && Main.tile[k, l + 1].TileType != 274)
-							{
-								if (Main.tile[k + 1, l].TileType != 190 && Main.tile[k + 1, l].TileType != 48 && Main.tile[k + 1, l].TileType != 232 && WorldGen.SolidTile(k - 1, l + 1) && WorldGen.SolidTile(k + 1, l) && !Main.tile[k - 1, l].HasTile && !Main.tile[k + 1, l - 1].HasTile)
-								{
+							else if (!Main.tile[k, l].HasTile && Main.tile[k, l + 1].TileType != 151 && Main.tile[k, l + 1].TileType != 274) {
+								if (Main.tile[k + 1, l].TileType != 190 && Main.tile[k + 1, l].TileType != 48 && Main.tile[k + 1, l].TileType != 232 && WorldGen.SolidTile(k - 1, l + 1) && WorldGen.SolidTile(k + 1, l) && !Main.tile[k - 1, l].HasTile && !Main.tile[k + 1, l - 1].HasTile) {
 									WorldGen.PlaceTile(k, l, (int)Main.tile[k, l + 1].TileType, false, false, -1, 0);
-									if (WorldGen.genRand.Next(2) == 0)
-									{
+									if (WorldGen.genRand.Next(2) == 0) {
 										WorldGen.SlopeTile(k, l, 2);
 									}
-									else
-									{
+									else {
 										WorldGen.PoundTile(k, l);
 									}
 								}
-								if (Main.tile[k - 1, l].TileType != 190 && Main.tile[k - 1, l].TileType != 48 && Main.tile[k - 1, l].TileType != 232 && WorldGen.SolidTile(k + 1, l + 1) && WorldGen.SolidTile(k - 1, l) && !Main.tile[k + 1, l].HasTile && !Main.tile[k - 1, l - 1].HasTile)
-								{
+								if (Main.tile[k - 1, l].TileType != 190 && Main.tile[k - 1, l].TileType != 48 && Main.tile[k - 1, l].TileType != 232 && WorldGen.SolidTile(k + 1, l + 1) && WorldGen.SolidTile(k - 1, l) && !Main.tile[k + 1, l].HasTile && !Main.tile[k - 1, l - 1].HasTile) {
 									WorldGen.PlaceTile(k, l, (int)Main.tile[k, l + 1].TileType, false, false, -1, 0);
-									if (WorldGen.genRand.Next(2) == 0)
-									{
+									if (WorldGen.genRand.Next(2) == 0) {
 										WorldGen.SlopeTile(k, l, 1);
 									}
-									else
-									{
+									else {
 										WorldGen.PoundTile(k, l);
 									}
 								}
 							}
 						}
-						else if (!Main.tile[k, l + 1].HasTile && WorldGen.genRand.Next(2) == 0 && WorldGen.SolidTile(k, l) && !Main.tile[k - 1, l].IsHalfBlock && !Main.tile[k + 1, l].IsHalfBlock && Main.tile[k - 1, l].Slope == SlopeType.Solid && Main.tile[k + 1, l].Slope == SlopeType.Solid && WorldGen.SolidTile(k, l - 1))
-						{
-							if (WorldGen.SolidTile(k - 1, l) && !WorldGen.SolidTile(k + 1, l) && WorldGen.SolidTile(k - 1, l - 1))
-							{
+						else if (!Main.tile[k, l + 1].HasTile && WorldGen.genRand.Next(2) == 0 && WorldGen.SolidTile(k, l) && !Main.tile[k - 1, l].IsHalfBlock && !Main.tile[k + 1, l].IsHalfBlock && Main.tile[k - 1, l].Slope == SlopeType.Solid && Main.tile[k + 1, l].Slope == SlopeType.Solid && WorldGen.SolidTile(k, l - 1)) {
+							if (WorldGen.SolidTile(k - 1, l) && !WorldGen.SolidTile(k + 1, l) && WorldGen.SolidTile(k - 1, l - 1)) {
 								WorldGen.SlopeTile(k, l, 3);
 							}
-							else if (WorldGen.SolidTile(k + 1, l) && !WorldGen.SolidTile(k - 1, l) && WorldGen.SolidTile(k + 1, l - 1))
-							{
+							else if (WorldGen.SolidTile(k + 1, l) && !WorldGen.SolidTile(k - 1, l) && WorldGen.SolidTile(k + 1, l - 1)) {
 								WorldGen.SlopeTile(k, l, 4);
 							}
 						}
 					}
 				}
 			}
-			for (int m = 20; m < Main.maxTilesX - 20; m++)
-			{
-				for (int n = 20; n < Main.maxTilesY - 20; n++)
-				{
-					if (WorldGen.genRand.Next(2) == 0 && !Main.tile[m, n - 1].HasTile && Main.tile[m, n].TileType != 137 && Main.tile[m, n].TileType != 48 && Main.tile[m, n].TileType != 232 && Main.tile[m, n].TileType != 191 && Main.tile[m, n].TileType != 151 && Main.tile[m, n].TileType != 274 && Main.tile[m, n].TileType != 75 && Main.tile[m, n].TileType != 76 && WorldGen.SolidTile(m, n) && Main.tile[m - 1, n].TileType != 137 && Main.tile[m + 1, n].TileType != 137)
-					{
-						if (WorldGen.SolidTile(m, n + 1) && WorldGen.SolidTile(m + 1, n) && !Main.tile[m - 1, n].HasTile)
-						{
+			for (int m = 20; m < Main.maxTilesX - 20; m++) {
+				for (int n = 20; n < Main.maxTilesY - 20; n++) {
+					if (WorldGen.genRand.Next(2) == 0 && !Main.tile[m, n - 1].HasTile && Main.tile[m, n].TileType != 137 && Main.tile[m, n].TileType != 48 && Main.tile[m, n].TileType != 232 && Main.tile[m, n].TileType != 191 && Main.tile[m, n].TileType != 151 && Main.tile[m, n].TileType != 274 && Main.tile[m, n].TileType != 75 && Main.tile[m, n].TileType != 76 && WorldGen.SolidTile(m, n) && Main.tile[m - 1, n].TileType != 137 && Main.tile[m + 1, n].TileType != 137) {
+						if (WorldGen.SolidTile(m, n + 1) && WorldGen.SolidTile(m + 1, n) && !Main.tile[m - 1, n].HasTile) {
 							WorldGen.SlopeTile(m, n, 2);
 						}
-						if (WorldGen.SolidTile(m, n + 1) && WorldGen.SolidTile(m - 1, n) && !Main.tile[m + 1, n].HasTile)
-						{
+						if (WorldGen.SolidTile(m, n + 1) && WorldGen.SolidTile(m - 1, n) && !Main.tile[m + 1, n].HasTile) {
 							WorldGen.SlopeTile(m, n, 1);
 						}
 					}
-					if (Main.tile[m, n].Slope == SlopeType.SlopeDownLeft && !WorldGen.SolidTile(m - 1, n))
-					{
+					if (Main.tile[m, n].Slope == SlopeType.SlopeDownLeft && !WorldGen.SolidTile(m - 1, n)) {
 						WorldGen.SlopeTile(m, n, 0);
 						WorldGen.PoundTile(m, n);
 					}
-					if (Main.tile[m, n].Slope == SlopeType.SlopeDownRight && !WorldGen.SolidTile(m + 1, n))
-					{
+					if (Main.tile[m, n].Slope == SlopeType.SlopeDownRight && !WorldGen.SolidTile(m + 1, n)) {
 						WorldGen.SlopeTile(m, n, 0);
 						WorldGen.PoundTile(m, n);
 					}

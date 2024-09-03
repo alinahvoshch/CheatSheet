@@ -9,8 +9,7 @@ namespace CheatSheet.Menus
 {
 	internal class SpawnRateMultiplierGlobalNPC : GlobalNPC
 	{
-		public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
-		{
+		public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns) {
 			spawnRate = (int)(spawnRate / SpawnRateMultiplier.currentMultiplier);
 			maxSpawns = (int)(maxSpawns * SpawnRateMultiplier.currentMultiplier);
 		}
@@ -26,51 +25,42 @@ namespace CheatSheet.Menus
 		public static UIImage button;
 		public static bool HasPermission = true;
 
-		public static UIImage GetButton(Mod mod)
-		{
+		public static UIImage GetButton(Mod mod) {
 			button = new UIImage(ModUtils.GetItemTexture(ItemID.WaterCandle));
 
 			button.Tooltip = CSText("SpawnRateMultiplier");
-			button.onRightClick += (s, e) =>
-			{
+			button.onRightClick += (s, e) => {
 				buttonLogic(false);
 			};
-			button.onLeftClick += (s, e) =>
-			{
+			button.onLeftClick += (s, e) => {
 				buttonLogic(true);
 			};
 			button.ForegroundColor = Color.White;
 			return button;
 		}
 
-		public static void buttonLogic(bool leftMouse)
-		{
+		public static void buttonLogic(bool leftMouse) {
 			int newIndex = leftMouse ? (currentMultiplierIndex + 1) % multiplierStrings.Length : (multiplierStrings.Length + currentMultiplierIndex - 1) % multiplierStrings.Length;
 
-			if (Main.netMode == 1)
-			{
+			if (Main.netMode == 1) {
 				RequestSetSpawnRate(newIndex);
 			}
-			else
-			{
+			else {
 				ChangeSettingLogic(newIndex);
 			}
 		}
 
-		public static void ChangeSettingLogic(int newSetting)
-		{
+		public static void ChangeSettingLogic(int newSetting) {
 			currentMultiplierIndex = newSetting;
 			currentMultiplier = multipliers[currentMultiplierIndex];
-			if (!Main.dedServ)
-			{
+			if (!Main.dedServ) {
 				button.Tooltip = CSText("SpawnRateMultiplierNew") + " " + multiplierStrings[currentMultiplierIndex];
 				Main.NewText(CSText("SpawnRateMultiplierText") + " " + multiplierStrings[currentMultiplierIndex] + " " + CSText("SpawnRateNormalValue"));
 			}
 		}
 
 		// Action Taken by Client Button
-		internal static void RequestSetSpawnRate(int index)
-		{
+		internal static void RequestSetSpawnRate(int index) {
 			var netMessage = CheatSheet.instance.GetPacket();
 			netMessage.Write((byte)CheatSheetMessageType.SetSpawnRate);
 			netMessage.Write(index);
@@ -78,8 +68,7 @@ namespace CheatSheet.Menus
 		}
 
 		// Action taken by sever receiving button
-		internal static void HandleSetSpawnRate(BinaryReader reader, int whoAmI)
-		{
+		internal static void HandleSetSpawnRate(BinaryReader reader, int whoAmI) {
 			// TODO: Don't just trust UI? Lazy.
 
 			int newSetting = reader.ReadInt32();
@@ -92,29 +81,25 @@ namespace CheatSheet.Menus
 		}
 
 		// Action taken by client receiving button
-		internal static void HandleSpawnRateSet(BinaryReader reader, int whoAmI)
-		{
+		internal static void HandleSpawnRateSet(BinaryReader reader, int whoAmI) {
 			int newSetting = reader.ReadInt32();
 			ChangeSettingLogic(newSetting);
 		}
 
 		// HEROS MOD INTEGRATION
 		// This method is called when the cursor is hovering over the button in Heros mod or Cheat Sheet
-		public static string HEROsTooltip()
-		{
+		public static string HEROsTooltip() {
 			return "Spawn Rate Multiplier: " + multiplierStrings[currentMultiplierIndex];
 		}
 
 		// This method is called when the button is pressed using Heros mod or Cheat Sheet
-		public static void HEROsButtonPressed()
-		{
+		public static void HEROsButtonPressed() {
 			buttonLogic(true);
 		}
 
 		// This method is called when Permissions change while using HERO's Mod.
 		// We need to make sure to disable instantRespawn when we are no longer allowed to use the tool.
-		public static void HEROsPermissionChanged(bool hasPermission)
-		{
+		public static void HEROsPermissionChanged(bool hasPermission) {
 			HasPermission = hasPermission;
 
 			CheatSheet.instance.hotbar.ChangedConfiguration();

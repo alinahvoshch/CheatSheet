@@ -1,7 +1,6 @@
 ﻿using CheatSheet.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.GameContent;
 
@@ -23,16 +22,14 @@ namespace CheatSheet.Menus
 
 		public static bool updateNeeded;
 
-		public PaintToolsSlot(StampInfo stampInfo)
-		{
+		public PaintToolsSlot(StampInfo stampInfo) {
 			this.stampInfo = stampInfo;
 			texture = TextureAssets.MagicPixel.Value;
 			updateNeeded = true;
 			base.onLeftClick += (a, b) => Select();
 		}
 
-		internal Texture2D MakeThumbnail(StampInfo stampInfo)
-		{
+		internal Texture2D MakeThumbnail(StampInfo stampInfo) {
 			int desiredWidth = 100;
 			int desiredHeight = 100;
 
@@ -41,15 +38,12 @@ namespace CheatSheet.Menus
 
 			float scale = 1;
 			Vector2 offset = new Vector2();
-			if (actualWidth > desiredWidth || actualHeight > desiredHeight)
-			{
-				if (actualHeight > actualWidth)
-				{
+			if (actualWidth > desiredWidth || actualHeight > desiredHeight) {
+				if (actualHeight > actualWidth) {
 					scale = (float)desiredWidth / actualHeight;
 					offset.X = (desiredWidth - actualWidth * scale) / 2;
 				}
-				else
-				{
+				else {
 					scale = (float)desiredWidth / actualWidth;
 					offset.Y = (desiredHeight - actualHeight * scale) / 2;
 				}
@@ -73,31 +67,26 @@ namespace CheatSheet.Menus
 			return mergedTexture;
 		}
 
-		public void Select()
-		{
+		public void Select() {
 			CheatSheet.instance.paintToolsUI.infoPanel.Visible = false;
 			CheatSheet.instance.paintToolsUI.submitPanel.Visible = false;
 			CheatSheet.instance.paintToolsUI.submitInput.Text = "";
-			if (CurrentSelect != null)
-			{
+			if (CurrentSelect != null) {
 				CurrentSelect.isSelect = false;
 			}
-			if (CurrentSelect == this)
-			{
+			if (CurrentSelect == this) {
 				CurrentSelect = null;
 				CheatSheet.instance.paintToolsHotbar.StampTiles = new TileData[0, 0];
 				CheatSheet.instance.paintToolsHotbar.stampInfo = null;
 			}
-			else
-			{
+			else {
 				isSelect = true;
 				CurrentSelect = this;
 				CheatSheet.instance.paintToolsHotbar.StampTiles = stampInfo.Tiles;
 				CheatSheet.instance.paintToolsHotbar.stampInfo = stampInfo;
 
 				// Update UI;
-				if (CurrentSelect.browserID > 0)
-				{
+				if (CurrentSelect.browserID > 0) {
 					CheatSheet.instance.paintToolsUI.infoPanel.Visible = true;
 					CheatSheet.instance.paintToolsUI.infoMessage.Text = browserName + ": " + rating;
 					CheatSheet.instance.paintToolsUI.upVoteButton.ForegroundColor = Color.White;
@@ -108,28 +97,24 @@ namespace CheatSheet.Menus
 					if (CurrentSelect.vote == -1)
 						CheatSheet.instance.paintToolsUI.downVoteButton.ForegroundColor = Color.Gray;
 				}
-				else if (CurrentSelect.browserID == 0)
-				{
+				else if (CurrentSelect.browserID == 0) {
 					// TODO: restore this when online fixed
 					//CheatSheet.instance.paintToolsUI.submitPanel.Visible = true;
 				}
 			}
 		}
 
-		protected override float GetWidth()
-		{
+		protected override float GetWidth() {
 			return 100;
 			//return (float)texture.Width * base.Scale;
 		}
 
-		protected override float GetHeight()
-		{
+		protected override float GetHeight() {
 			return 100;
 			//return (float)texture.Height * base.Scale;
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
+		public override void Draw(SpriteBatch spriteBatch) {
 			Point pos = base.DrawPosition.ToPoint();
 			Rectangle rectangle = new Rectangle(pos.X, pos.Y, (int)GetWidth(), (int)GetHeight());
 
@@ -153,8 +138,7 @@ namespace CheatSheet.Menus
 
 			spriteBatch.Draw(texture, base.DrawPosition, null, Color.White, 0f, Vector2.Zero, base.Scale, effects, 0f);
 
-			if (isSelect)
-			{
+			if (isSelect) {
 				b = 0.3f;
 				g = 0.95f;
 				scale2 = (a = 1f);

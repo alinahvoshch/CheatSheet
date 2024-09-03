@@ -31,8 +31,7 @@ namespace CheatSheet.Menus
 
 		private CheatSheet mod;
 
-		public EventManagerHotbar(CheatSheet mod)
-		{
+		public EventManagerHotbar(CheatSheet mod) {
 			this.mod = mod;
 			//parentHotbar = mod.hotbar;
 
@@ -86,10 +85,8 @@ namespace CheatSheet.Menus
 			bStopEvents.onLeftClick += new EventHandler(this.bStopEvents_onLeftClick);
 
 			// Register mousedown
-			onMouseDown += (s, e) =>
-			{
-				if (!Main.LocalPlayer.mouseInterface && !mod.hotbar.MouseInside && !mod.hotbar.button.MouseInside)
-				{
+			onMouseDown += (s, e) => {
+				if (!Main.LocalPlayer.mouseInterface && !mod.hotbar.MouseInside && !mod.hotbar.button.MouseInside) {
 					mouseDown = true;
 					Main.LocalPlayer.mouseInterface = true;
 				}
@@ -116,8 +113,7 @@ namespace CheatSheet.Menus
 			base.Position = new Vector2(Hotbar.xPosition, this.hiddenPosition);
 			base.CenterXAxisToParentCenter();
 			float num = this.spacing;
-			for (int i = 0; i < this.buttonView.children.Count; i++)
-			{
+			for (int i = 0; i < this.buttonView.children.Count; i++) {
 				this.buttonView.children[i].Anchor = AnchorPosition.Left;
 				this.buttonView.children[i].Position = new Vector2(num, 0f);
 				this.buttonView.children[i].CenterYAxisToParentCenter();
@@ -128,8 +124,7 @@ namespace CheatSheet.Menus
 			this.Resize();
 		}
 
-		private void bStopEvents_onLeftClick(object sender, EventArgs e)
-		{
+		private void bStopEvents_onLeftClick(object sender, EventArgs e) {
 			//Reset invasions
 			Main.invasionType = 0;
 			Main.invasionX = 0.0;
@@ -152,17 +147,15 @@ namespace CheatSheet.Menus
 			Main.bloodMoon = false;
 		}
 
-		private void bMartianMadness_onLeftClick(object sender, EventArgs e)
-		{
-			if (Main.CanStartInvasion(4)) Main.StartInvasion(4);
+		private void bMartianMadness_onLeftClick(object sender, EventArgs e) {
+			if (Main.CanStartInvasion(4))
+				Main.StartInvasion(4);
 		}
 
-		private void bFrostMoon_onLeftClick(object sender, EventArgs e)
-		{
+		private void bFrostMoon_onLeftClick(object sender, EventArgs e) {
 			Main.dayTime = false;
 			Main.stopMoonEvent();
-			if (Main.netMode != 1)
-			{
+			if (Main.netMode != 1) {
 				Main.NewText(Lang.misc[34].Value, (byte)50, byte.MaxValue, (byte)130);
 				Main.startSnowMoon();
 			}
@@ -170,64 +163,53 @@ namespace CheatSheet.Menus
 				NetMessage.SendData(61, -1, -1, null, Main.LocalPlayer.whoAmI, -5f, 0.0f, 0.0f, 0, 0, 0);
 		}
 
-		private void bPumpkinMoon_onLeftClick(object sender, EventArgs e)
-		{
+		private void bPumpkinMoon_onLeftClick(object sender, EventArgs e) {
 			Main.dayTime = false;
 			Main.stopMoonEvent();
 			// REQUIRED
-			if (Main.netMode != 1)
-			{
+			if (Main.netMode != 1) {
 				Main.NewText(Lang.misc[31].Value, (byte)50, byte.MaxValue, (byte)130);
 				Main.startPumpkinMoon();
 			}
-			else
-			{
+			else {
 				NetMessage.SendData(61, -1, -1, null, Main.LocalPlayer.whoAmI, -4f, 0.0f, 0.0f, 0, 0, 0);
 			}
 		}
 
-		private void bPirateInvasion_onLeftClick(object sender, EventArgs e)
-		{
-			if (Main.CanStartInvasion(3)) Main.StartInvasion(3);
+		private void bPirateInvasion_onLeftClick(object sender, EventArgs e) {
+			if (Main.CanStartInvasion(3))
+				Main.StartInvasion(3);
 		}
 
-		private void bSolarEclipse_onLeftClick(object sender, EventArgs e)
-		{
+		private void bSolarEclipse_onLeftClick(object sender, EventArgs e) {
 			Main.dayTime = true;
 			Main.time = 32400.1;
 
-			if (Main.netMode != 1)
-			{
+			if (Main.netMode != 1) {
 				AchievementsHelper.NotifyProgressionEvent(1);
 				Main.eclipse = true;
 				AchievementsHelper.NotifyProgressionEvent(2);
-				if (Main.eclipse)
-				{
-					if (Main.netMode == 0)
-					{
+				if (Main.eclipse) {
+					if (Main.netMode == 0) {
 						Main.NewText(Lang.misc[20].Value, (byte)50, byte.MaxValue, (byte)130);
 					}
-					else if (Main.netMode == 2)
-					{
+					else if (Main.netMode == 2) {
 						ChatHelper.BroadcastChatMessage(Lang.misc[20].ToNetworkText(), new Color(50, 255, 130), -1);
 					}
 				}
-				if (Main.netMode == 2)
-				{
+				if (Main.netMode == 2) {
 					NetMessage.SendData(7, -1, -1, null, 0, 0.0f, 0.0f, 0.0f, 0, 0, 0);
 				}
 			}
 		}
 
-		private void bFrostlegion_onLeftClick(object sender, EventArgs e)
-		{
-			if (Main.CanStartInvasion(2)) Main.StartInvasion(2);
+		private void bFrostlegion_onLeftClick(object sender, EventArgs e) {
+			if (Main.CanStartInvasion(2))
+				Main.StartInvasion(2);
 		}
 
-		private void bSlimerain_onLeftClick(object sender, EventArgs e)
-		{
-			if (Main.netMode != 1 && !Main.gameMenu || Main.netMode == 2)
-			{
+		private void bSlimerain_onLeftClick(object sender, EventArgs e) {
+			if (Main.netMode != 1 && !Main.gameMenu || Main.netMode == 2) {
 				//(!Main.raining && Main.slimeRainTime == 0.0 && (!Main.bloodMoon && !Main.eclipse) && (!Main.snowMoon && !Main.pumpkinMoon && Main.invasionType == 0))
 				Main.raining = false;
 				Main.slimeRainTime = 0.0;
@@ -240,11 +222,11 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		private void bBloodmoon_onLeftClick(object sender, EventArgs e)
-		{
+		private void bBloodmoon_onLeftClick(object sender, EventArgs e) {
 			Main.dayTime = false;
 			Main.time = 0.0;
-			if (Main.moonPhase == 0) Main.moonPhase++;
+			if (Main.moonPhase == 0)
+				Main.moonPhase++;
 			WorldGen.spawnEye = false;
 			Main.bloodMoon = true;
 			AchievementsHelper.NotifyProgressionEvent(4);
@@ -254,23 +236,20 @@ namespace CheatSheet.Menus
 				ChatHelper.BroadcastChatMessage(Lang.misc[8].ToNetworkText(), new Microsoft.Xna.Framework.Color(50, 255, 130), -1);
 		}
 
-		private void bGoblinInvasion_onLeftClick(object sender, EventArgs e)
-		{
-			if (Main.CanStartInvasion()) Main.StartInvasion();
+		private void bGoblinInvasion_onLeftClick(object sender, EventArgs e) {
+			if (Main.CanStartInvasion())
+				Main.StartInvasion();
 		}
 
-		public override void Update()
-		{
+		public override void Update() {
 			DoSlideMovement();
 
 			base.CenterXAxisToParentCenter();
 			base.Update();
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			if (Visible)
-			{
+		public override void Draw(SpriteBatch spriteBatch) {
+			if (Visible) {
 				spriteBatch.End();
 				spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, this._rasterizerState, null, Main.UIScaleMatrix);
 				//	Rectangle scissorRectangle = new Rectangle((int)base.X- (int)base.Width, (int)base.Y, (int)base.Width, (int)base.Height);
@@ -309,42 +288,34 @@ namespace CheatSheet.Menus
 
 			//	base.Draw(spriteBatch);
 
-			if (Visible && (base.IsMouseInside() /*|| button.MouseInside*/))
-			{
+			if (Visible && (base.IsMouseInside() /*|| button.MouseInside*/)) {
 				Main.LocalPlayer.mouseInterface = true;
 				//Main.LocalPlayer.showItemIcon = false;
 			}
 
-			if (Visible && IsMouseInside())
-			{
+			if (Visible && IsMouseInside()) {
 				Main.LocalPlayer.mouseInterface = true;
 			}
 
 			float x = FontAssets.MouseText.Value.MeasureString(UIView.HoverText).X;
 			Vector2 vector = new Vector2((float)Main.mouseX, (float)Main.mouseY) + new Vector2(16f);
-			if (vector.Y > (float)(Main.screenHeight - 30))
-			{
+			if (vector.Y > (float)(Main.screenHeight - 30)) {
 				vector.Y = (float)(Main.screenHeight - 30);
 			}
-			if (vector.X > (float)Main.screenWidth - x)
-			{
+			if (vector.X > (float)Main.screenWidth - x) {
 				vector.X = (float)(Main.screenWidth - 460);
 			}
 			Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.MouseText.Value, UIView.HoverText, vector.X, vector.Y, new Color((int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor), Color.Black, Vector2.Zero, 1f);
 		}
 
-		protected override bool IsMouseInside()
-		{
+		protected override bool IsMouseInside() {
 			return hidden ? false : base.IsMouseInside();
 		}
 
-		public void Resize()
-		{
+		public void Resize() {
 			float num = this.spacing;
-			for (int i = 0; i < this.buttonView.children.Count; i++)
-			{
-				if (this.buttonView.children[i].Visible)
-				{
+			for (int i = 0; i < this.buttonView.children.Count; i++) {
+				if (this.buttonView.children[i].Visible) {
 					this.buttonView.children[i].X = num;
 					num += this.buttonView.children[i].Width + this.spacing;
 				}
@@ -353,14 +324,12 @@ namespace CheatSheet.Menus
 			this.buttonView.Width = base.Width;
 		}
 
-		public void Hide()
-		{
+		public void Hide() {
 			hidden = true;
 			arrived = false;
 		}
 
-		public void Show()
-		{
+		public void Show() {
 			mod.hotbar.currentHotbar = this;
 			arrived = false;
 			hidden = false;

@@ -12,19 +12,15 @@ namespace CheatSheet.UI
 		internal static Asset<Texture2D> textboxBackground;
 		private static Texture2D textboxFill;
 
-		private static Texture2D TextboxFill
-		{
-			get
-			{
-				if (textboxFill == null && textboxBackground.Value != null)
-				{
+		private static Texture2D TextboxFill {
+			get {
+				if (textboxFill == null && textboxBackground.Value != null) {
 					int width = textboxBackground.Width();
 					int height = textboxBackground.Height();
 					Color[] edgeColors = new Color[width * height];
 					textboxBackground.Value.GetData(edgeColors);
 					Color[] fillColors = new Color[height];
-					for (int y = 0; y < fillColors.Length; y++)
-					{
+					for (int y = 0; y < fillColors.Length; y++) {
 						fillColors[y] = edgeColors[width - 1 + y * width];
 					}
 					textboxFill = new Texture2D(UIView.graphics, 1, fillColors.Length);
@@ -64,18 +60,16 @@ namespace CheatSheet.UI
 
 		public bool PasswordBox { get; set; } = false;
 
-		private string passwordString
-		{
-			get
-			{
+		private string passwordString {
+			get {
 				string result = "";
-				for (int i = 0; i < Text.Length; i++) result += "*";
+				for (int i = 0; i < Text.Length; i++)
+					result += "*";
 				return result;
 			}
 		}
 
-		public UITextbox()
-		{
+		public UITextbox() {
 			textboxBackground = CheatSheet.instance.Assets.Request<Texture2D>("UI/Images.UIKit.textboxEdge", AssetRequestMode.ImmediateLoad);
 			this.onLeftClick += new EventHandler(UITextbox_onLeftClick);
 			this.onRightClick += (a, b) => {
@@ -91,15 +85,12 @@ namespace CheatSheet.UI
 			this.AddChild(label);
 		}
 
-		private void UITextbox_onLeftClick(object sender, EventArgs e)
-		{
+		private void UITextbox_onLeftClick(object sender, EventArgs e) {
 			Focus();
 		}
 
-		public void Focus()
-		{
-			if (!focused)
-			{
+		public void Focus() {
+			if (!focused) {
 				Main.clrInput();
 				focused = true;
 				Main.blockInput = true;
@@ -111,10 +102,8 @@ namespace CheatSheet.UI
 			//keyBoardInput.newKeyEvent += new Action<char>(KeyboardInput_newKeyEvent);
 		}
 
-		public void Unfocus()
-		{
-			if (focused)
-			{
+		public void Unfocus() {
+			if (focused) {
 				focused = false;
 				Main.blockInput = false;
 
@@ -189,70 +178,59 @@ namespace CheatSheet.UI
 		}*/
 		//}
 
-		private void SetLabelPosition()
-		{
+		private void SetLabelPosition() {
 			label.Position = new Vector2(padding, 0);
 
 			Vector2 size = label.font.MeasureString(Text + "|") * label.Scale;
-			if (PasswordBox)
-			{
+			if (PasswordBox) {
 				size = label.font.MeasureString(passwordString + "|") * label.Scale;
 			}
-			if (size.X > Width - padding * 2)
-			{
+			if (size.X > Width - padding * 2) {
 				label.Position = new Vector2(padding - (size.X - (Width - padding * 2)), 0);
 			}
 		}
 
-		protected override float GetWidth()
-		{
+		protected override float GetWidth() {
 			return width;
 		}
 
-		protected override void SetWidth(float width)
-		{
+		protected override void SetWidth(float width) {
 			this.width = width;
 		}
 
-		protected override float GetHeight()
-		{
+		protected override float GetHeight() {
 			return textboxBackground.Height();
 		}
 
-		public override void Update()
-		{
+		public override void Update() {
 			base.Update();
-			if (!IsMouseInside() && (MouseLeftButton || MouseRightButton))
-			{
+			if (!IsMouseInside() && (MouseLeftButton || MouseRightButton)) {
 				Unfocus();
 			}
-			if (focused)
-			{
+			if (focused) {
 				timer += .1f; //ModUtils.DeltaTime;
-				if (timer < blinkTime / 2) drawCarrot = true;
-				else drawCarrot = false;
-				if (timer >= blinkTime) timer = 0;
+				if (timer < blinkTime / 2)
+					drawCarrot = true;
+				else
+					drawCarrot = false;
+				if (timer >= blinkTime)
+					timer = 0;
 			}
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			if (focused)
-			{
+		public override void Draw(SpriteBatch spriteBatch) {
+			if (focused) {
 				Terraria.GameInput.PlayerInput.WritingText = true;
 				Main.instance.HandleIME();
 				string oldText = Text;
 				Text = Main.GetInputText(Text);
-				if (oldText != Text)
-				{
+				if (oldText != Text) {
 					KeyPressed?.Invoke(this, ' ');
 				}
-				if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Tab))
-				{
+				if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Tab)) {
 					OnTabPress?.Invoke(this, new EventArgs());
 				}
-				if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Enter))
-				{
+				if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Enter)) {
 					OnEnterPress?.Invoke(this, new EventArgs());
 				}
 				spriteBatch.End();
@@ -264,21 +242,21 @@ namespace CheatSheet.UI
 			int fillWidth = (int)Width - 2 * textboxBackground.Width();
 			Vector2 pos = DrawPosition;
 			pos.X += textboxBackground.Width();
-			if (TextboxFill != null)
-            {
+			if (TextboxFill != null) {
 				spriteBatch.Draw(TextboxFill, pos - Origin, null, Color.White, 0f, Vector2.Zero, new Vector2(fillWidth, 1f), SpriteEffects.None, 0f);
 			}
 			pos.X += fillWidth;
 			spriteBatch.Draw(textboxBackground.Value, pos, null, Color.White, 0f, Origin, 1f, SpriteEffects.FlipHorizontally, 0f);
 			string drawString = Text;
-			if (PasswordBox) drawString = passwordString;
-			if (drawCarrot && focused) drawString += "|";
+			if (PasswordBox)
+				drawString = passwordString;
+			if (drawCarrot && focused)
+				drawString += "|";
 			label.Text = drawString;
 
 			pos = DrawPosition - Origin;
 
-			if (pos.X <= Main.screenWidth && pos.Y <= Main.screenHeight && pos.X + Width >= 0 && pos.Y + Height >= 0)
-			{
+			if (pos.X <= Main.screenWidth && pos.Y <= Main.screenHeight && pos.X + Width >= 0 && pos.Y + Height >= 0) {
 				spriteBatch.End();
 				spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, _rasterizerState, null, Main.UIScaleMatrix);
 

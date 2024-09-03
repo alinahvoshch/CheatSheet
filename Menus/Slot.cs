@@ -25,19 +25,16 @@ namespace CheatSheet.Menus
 		public bool functionalSlot;
 		private bool rightClicking;
 
-		public Slot(Vector2 position, int itemNum)
-		{
+		public Slot(Vector2 position, int itemNum) {
 			base.Position = position;
 			this.Init(itemNum);
 		}
 
-		public Slot(int itemNum)
-		{
+		public Slot(int itemNum) {
 			this.Init(itemNum);
 		}
 
-		private void Init(int itemNum)
-		{
+		private void Init(int itemNum) {
 			base.Scale = 0.85f;
 			this.item.SetDefaults(itemNum, false);
 			base.onLeftClick += new EventHandler(this.Slot2_onLeftClick);
@@ -46,48 +43,36 @@ namespace CheatSheet.Menus
 			base.onHover += new EventHandler(this.Slot2_onHover);
 		}
 
-		protected override float GetWidth()
-		{
+		protected override float GetWidth() {
 			return (float)Slot.backgroundTexture.Width() * base.Scale;
 		}
 
-		public override void Update()
-		{
-			if (!UIView.MouseRightButton)
-			{
+		public override void Update() {
+			if (!UIView.MouseRightButton) {
 				this.rightClicking = false;
 			}
-			if (rightClicking)
-			{
+			if (rightClicking) {
 				Main.playerInventory = true;
 
-				if (Main.stackSplit <= 1 /*&& Main.mouseRight */&& item.type > 0 && (Main.mouseItem.type == item.type || Main.mouseItem.type == 0))
-				{
+				if (Main.stackSplit <= 1 /*&& Main.mouseRight */&& item.type > 0 && (Main.mouseItem.type == item.type || Main.mouseItem.type == 0)) {
 					int num2 = Main.superFastStack + 1;
-					for (int j = 0; j < num2; j++)
-					{
-						if ((Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0) && item.stack > 0)
-						{
-							if (j == 0)
-							{
+					for (int j = 0; j < num2; j++) {
+						if ((Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0) && item.stack > 0) {
+							if (j == 0) {
 								SoundEngine.PlaySound(SoundID.Coins);
 							}
-							if (Main.mouseItem.type == 0)
-							{
+							if (Main.mouseItem.type == 0) {
 								Main.mouseItem.netDefaults(item.netID);
-								if (item.prefix != 0)
-								{
+								if (item.prefix != 0) {
 									Main.mouseItem.Prefix((int)item.prefix);
 								}
 								Main.mouseItem.stack = 0;
 							}
 							Main.mouseItem.stack++;
-							if (Main.stackSplit == 0)
-							{
+							if (Main.stackSplit == 0) {
 								Main.stackSplit = 15;
 							}
-							else
-							{
+							else {
 								Main.stackSplit = Main.stackDelay;
 							}
 						}
@@ -96,13 +81,11 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		protected override float GetHeight()
-		{
+		protected override float GetHeight() {
 			return (float)Slot.backgroundTexture.Height() * base.Scale;
 		}
 
-		private void Slot2_onHover(object sender, EventArgs e)
-		{
+		private void Slot2_onHover(object sender, EventArgs e) {
 			//ErrorLogger.Log("On hover " + this.item.name);
 			//UIView.HoverText = this.item.name;
 			//UIView.HoverItem = this.item.Clone();
@@ -124,21 +107,17 @@ namespace CheatSheet.Menus
 			Main.HoverItem.SetNameOverride(Main.HoverItem.Name + (Main.HoverItem.ModItem != null ? " [" + Main.HoverItem.ModItem.Mod.Name + "]" : ""));
 		}
 
-		private void Slot2_onLeftClick(object sender, EventArgs e)
-		{
+		private void Slot2_onLeftClick(object sender, EventArgs e) {
 			//ErrorLogger.Log("On Slot2_onLeftClick " + this.item.name);
-			if (this.functionalSlot)
-			{
+			if (this.functionalSlot) {
 				Item item = Main.mouseItem.Clone();
 				Main.mouseItem = this.item.Clone();
 				this.item = item.Clone();
 				return;
 			}
 
-			if (Main.mouseItem.type == 0)
-			{
-				if (Main.keyState.IsKeyDown(Keys.LeftShift))
-				{
+			if (Main.mouseItem.type == 0) {
+				if (Main.keyState.IsKeyDown(Keys.LeftShift)) {
 					Main.LocalPlayer.QuickSpawnItem(new EntitySource_DebugCommand($"{CheatSheet.instance.Name}_ItemSlot"), this.item.type, this.item.maxStack);
 					return;
 				}
@@ -151,10 +130,8 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		private void Slot2_onMouseDown(object sender, byte button)
-		{
-			if (button == 0)
-			{
+		private void Slot2_onMouseDown(object sender, byte button) {
+			if (button == 0) {
 				return;
 			}
 
@@ -203,8 +180,7 @@ namespace CheatSheet.Menus
 			//}
 		}
 
-		private void Slot2_onRightClick(object sender, EventArgs e)
-		{
+		private void Slot2_onRightClick(object sender, EventArgs e) {
 			//if (Main.mouseItem.type == 0)
 			//{
 			//	if (Main.keyState.IsKeyDown(Keys.LeftShift))
@@ -219,40 +195,32 @@ namespace CheatSheet.Menus
 			//}
 			//ErrorLogger.Log("1");
 
-			if (Main.stackSplit <= 1 /*&& Main.mouseRight */&& item.type > 0 && (Main.mouseItem.type == item.type || Main.mouseItem.type == 0))
-			{
+			if (Main.stackSplit <= 1 /*&& Main.mouseRight */&& item.type > 0 && (Main.mouseItem.type == item.type || Main.mouseItem.type == 0)) {
 				////ErrorLogger.Log("2");
 
 				int num2 = Main.superFastStack + 1;
-				for (int j = 0; j < num2; j++)
-				{
-					if ((Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0) && item.stack > 0)
-					{
+				for (int j = 0; j < num2; j++) {
+					if ((Main.mouseItem.stack < Main.mouseItem.maxStack || Main.mouseItem.type == 0) && item.stack > 0) {
 						//	ErrorLogger.Log("3");
 
-						if (j == 0)
-						{
+						if (j == 0) {
 							SoundEngine.PlaySound(SoundID.Coins);
 						}
-						if (Main.mouseItem.type == 0)
-						{
+						if (Main.mouseItem.type == 0) {
 							//	ErrorLogger.Log("4");
 
 							Main.mouseItem.netDefaults(item.netID);
-							if (item.prefix != 0)
-							{
+							if (item.prefix != 0) {
 								//ErrorLogger.Log("??");
 								Main.mouseItem.Prefix((int)item.prefix);
 							}
 							Main.mouseItem.stack = 0;
 						}
 						Main.mouseItem.stack++;
-						if (Main.stackSplit == 0)
-						{
+						if (Main.stackSplit == 0) {
 							Main.stackSplit = 15;
 						}
-						else
-						{
+						else {
 							Main.stackSplit = Main.stackDelay;
 						}
 					}
@@ -260,8 +228,7 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
+		public override void Draw(SpriteBatch spriteBatch) {
 			spriteBatch.Draw(Slot.backgroundTexture.Value, base.DrawPosition, null, Color.White, 0f, Vector2.Zero, base.Scale, SpriteEffects.None, 0f);
 
 			float sizeLimit = backgroundTexture.Width() * Scale * 0.6f;
@@ -314,8 +281,7 @@ namespace CheatSheet.Menus
 				spriteBatch.Draw(texture2D, drawPosition, new Rectangle?(rectangle2), this.item.GetColor(Color.White), 0f, Vector2.Zero, num, SpriteEffects.None, 0f);
 			}
 			*/
-			if (this.item.stack > 1)
-			{
+			if (this.item.stack > 1) {
 				spriteBatch.DrawString(FontAssets.ItemStack.Value, this.item.stack.ToString(), new Vector2(base.DrawPosition.X + 10f * base.Scale, base.DrawPosition.Y + 26f * base.Scale), Color.White, 0f, Vector2.Zero, base.Scale, SpriteEffects.None, 0f);
 			}
 			base.Draw(spriteBatch);

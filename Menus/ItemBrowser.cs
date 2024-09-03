@@ -60,8 +60,7 @@ namespace CheatSheet.Menus
 
 		public int lastModNameNumber = 0;
 
-		public ItemBrowser(CheatSheet mod)
-		{
+		public ItemBrowser(CheatSheet mod) {
 			var itemIDs = new int[]
 			{
 				ItemID.AlphabetStatueA,
@@ -81,8 +80,7 @@ namespace CheatSheet.Menus
 			};
 			var categoryIconsList = new List<Asset<Texture2D>>();
 
-			foreach (var id in itemIDs)
-			{
+			foreach (var id in itemIDs) {
 				categoryIconsList.Add(ModUtils.GetItemTexture(id));
 			}
 			categoryIcons = categoryIconsList.ToArray();
@@ -110,22 +108,19 @@ namespace CheatSheet.Menus
 			//	this.textbox.Position = new Vector2(base.Width - this.spacing * 2f - uIImage.Width, this.spacing * 2f + uIImage.Height);
 			this.textbox.KeyPressed += new UITextbox.KeyPressedHandler(this.textbox_KeyPressed);
 			this.AddChild(this.textbox);
-			for (int j = 0; j < ItemBrowser.categoryIcons.Length; j++)
-			{
+			for (int j = 0; j < ItemBrowser.categoryIcons.Length; j++) {
 				Asset<Texture2D> asset = categoryIcons[j];
 				UIImage uIImage2 = new UIImage(asset);
 				Vector2 position = new Vector2(this.spacing, this.spacing);
-                uIImage2.Scale = 32f / Math.Max(asset.Width(), asset.Height());
+				uIImage2.Scale = 32f / Math.Max(asset.Width(), asset.Height());
 
 				position.X += (float)(j % 12 * 40);
 				position.Y += (float)(j / 12 * 40);
 
-				if (asset.Height() > asset.Width())
-				{
+				if (asset.Height() > asset.Width()) {
 					position.X += (32 - asset.Width()) / 2;
 				}
-				else if (asset.Height() < asset.Width())
-				{
+				else if (asset.Height() < asset.Width()) {
 					position.Y += (32 - asset.Height()) / 2;
 				}
 
@@ -134,8 +129,7 @@ namespace CheatSheet.Menus
 				uIImage2.onLeftClick += (s, e) => buttonClick(s, e, true);
 				uIImage2.onRightClick += (s, e) => buttonClick(s, e, false);
 				uIImage2.ForegroundColor = ItemBrowser.buttonColor;
-				if (j == 0)
-				{
+				if (j == 0) {
 					uIImage2.ForegroundColor = ItemBrowser.buttonSelectedColor;
 				}
 				uIImage2.Tooltip = ItemBrowser.categNames[j];
@@ -148,8 +142,7 @@ namespace CheatSheet.Menus
 			return;
 		}
 
-		public static void LoadStatic()
-        {
+		public static void LoadStatic() {
 			categNames = new string[]
 			{
 				CSText("AllItems"),
@@ -169,8 +162,7 @@ namespace CheatSheet.Menus
 			};
 		}
 
-		public static void UnloadStatic()
-		{
+		public static void UnloadStatic() {
 			categNames = null;
 			categories.Clear();
 			categoryIcons = null;
@@ -178,31 +170,26 @@ namespace CheatSheet.Menus
 			bCategories = null;
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
+		public override void Draw(SpriteBatch spriteBatch) {
 			base.Draw(spriteBatch);
 
-			if (Visible && IsMouseInside())
-			{
+			if (Visible && IsMouseInside()) {
 				Main.LocalPlayer.mouseInterface = true;
 				Main.LocalPlayer.cursorItemIconEnabled = false;
 			}
 
 			float x = FontAssets.MouseText.Value.MeasureString(UIView.HoverText).X;
 			Vector2 vector = new Vector2((float)Main.mouseX, (float)Main.mouseY) + new Vector2(16f);
-			if (vector.Y > (float)(Main.screenHeight - 30))
-			{
+			if (vector.Y > (float)(Main.screenHeight - 30)) {
 				vector.Y = (float)(Main.screenHeight - 30);
 			}
-			if (vector.X > (float)Main.screenWidth - x)
-			{
+			if (vector.X > (float)Main.screenWidth - x) {
 				vector.X = (float)(Main.screenWidth - 460);
 			}
 			Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.MouseText.Value, UIView.HoverText, vector.X, vector.Y, new Color((int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor), Color.Black, Vector2.Zero, 1f);
 		}
 
-		public override void Update()
-		{
+		public override void Update() {
 			//if (!arrived)
 			//{
 			//	if (this.hidden)
@@ -241,33 +228,29 @@ namespace CheatSheet.Menus
 			//UIView.HoverText = "";
 			//UIView.HoverOverridden = false;
 
-			if (!Main.playerInventory)
-			{
+			if (!Main.playerInventory) {
 				//base.Visible = false;
 			}
 			base.Update();
 		}
 
-		private void bClose_onLeftClick(object sender, EventArgs e)
-		{
+		private void bClose_onLeftClick(object sender, EventArgs e) {
 			Hide();
 			mod.hotbar.DisableAllWindows();
 			//base.Visible = false;
 		}
 
-		private void buttonClick(object sender, EventArgs e, bool left)
-		{
+		private void buttonClick(object sender, EventArgs e, bool left) {
 			UIImage uIImage = (UIImage)sender;
 			int num = (int)uIImage.Tag;
-			if (num == (int)ItemBrowserCategories.ModItems)
-			{
+			if (num == (int)ItemBrowserCategories.ModItems) {
 				var mods = ItemBrowser.ModToItems.Keys.ToList();
 				mods.Sort();
 				if (mods.Count == 0) {
 					Main.NewText(CSText("NoItemsHaveBeenAddedByMods"));
 				}
 				else {
-					if(uIImage.ForegroundColor == ItemBrowser.buttonSelectedColor)
+					if (uIImage.ForegroundColor == ItemBrowser.buttonSelectedColor)
 						lastModNameNumber = left ? (lastModNameNumber + 1) % mods.Count : (mods.Count + lastModNameNumber - 1) % mods.Count;
 					string currentMod = mods[lastModNameNumber];
 					this.itemView.selectedCategory = ItemBrowser.categories[0].Where(x => this.itemView.allItemsSlots[x].item.ModItem != null && this.itemView.allItemsSlots[x].item.ModItem.Mod.Name == currentMod).ToArray();
@@ -276,43 +259,36 @@ namespace CheatSheet.Menus
 					bCategories[num].Tooltip = ItemBrowser.categNames[num] + ": " + currentMod;
 				}
 			}
-			else
-			{
+			else {
 				this.itemView.selectedCategory = ItemBrowser.categories[num].ToArray();
 				this.itemView.activeSlots = this.itemView.selectedCategory;
 				this.itemView.ReorderSlots();
 			}
 			this.textbox.Text = "";
 			UIImage[] array = ItemBrowser.bCategories;
-			for (int j = 0; j < array.Length; j++)
-			{
+			for (int j = 0; j < array.Length; j++) {
 				UIImage uIImage2 = array[j];
 				uIImage2.ForegroundColor = ItemBrowser.buttonColor;
 			}
 			uIImage.ForegroundColor = ItemBrowser.buttonSelectedColor;
 		}
 
-		private void textbox_KeyPressed(object sender, char key)
-		{
-			if (this.textbox.Text.Length <= 0)
-			{
+		private void textbox_KeyPressed(object sender, char key) {
+			if (this.textbox.Text.Length <= 0) {
 				this.itemView.activeSlots = this.itemView.selectedCategory;
 				this.itemView.ReorderSlots();
 				return;
 			}
 			List<int> list = new List<int>();
 			int[] category = this.itemView.selectedCategory;
-			for (int i = 0; i < category.Length; i++)
-			{
+			for (int i = 0; i < category.Length; i++) {
 				int num = category[i];
 				Slot slot = this.itemView.allItemsSlots[num];
-				if (slot.item.Name.ToLower().IndexOf(this.textbox.Text.ToLower(), StringComparison.Ordinal) != -1)
-				{
+				if (slot.item.Name.ToLower().IndexOf(this.textbox.Text.ToLower(), StringComparison.Ordinal) != -1) {
 					list.Add(num);
 				}
 			}
-			if (list.Count > 0)
-			{
+			if (list.Count > 0) {
 				this.itemView.activeSlots = list.ToArray();
 				this.itemView.ReorderSlots();
 				return;
@@ -320,14 +296,11 @@ namespace CheatSheet.Menus
 			this.textbox.Text = this.textbox.Text.Substring(0, this.textbox.Text.Length - 1);
 		}
 
-		private void ParseList2()
-		{
+		private void ParseList2() {
 			//ItemBrowser.categoryNames = ItemBrowser.categNames.ToList<string>();
-			for (int i = 0; i < ItemBrowser.categNames.Length; i++)
-			{
+			for (int i = 0; i < ItemBrowser.categNames.Length; i++) {
 				ItemBrowser.categories.Add(new List<int>());
-				for (int j = 0; j < this.itemView.allItemsSlots.Length; j++)
-				{
+				for (int j = 0; j < this.itemView.allItemsSlots.Length; j++) {
 					Item item = itemView.allItemsSlots[j].item;
 					//"Weapons",
 					//"Tools",
@@ -341,8 +314,7 @@ namespace CheatSheet.Menus
 					//"Pets"
 					//"Mounts"
 					//"Materials"
-					if (i == 0)
-					{
+					if (i == 0) {
 						ItemBrowser.categories[i].Add(j);
 						if (j >= ItemID.Count) {
 							string modName = ItemLoader.GetItem(j).Mod.Name;
@@ -352,49 +324,38 @@ namespace CheatSheet.Menus
 							itemInMod.Add(j);
 						}
 					}
-					else if (i == (int)ItemBrowserCategories.Weapons && item.damage > 0)
-					{
+					else if (i == (int)ItemBrowserCategories.Weapons && item.damage > 0) {
 						ItemBrowser.categories[i].Add(j);
 					}
-					else if (i == (int)ItemBrowserCategories.Tools && (item.pick > 0 || item.axe > 0 || item.hammer > 0))
-					{
+					else if (i == (int)ItemBrowserCategories.Tools && (item.pick > 0 || item.axe > 0 || item.hammer > 0)) {
 						ItemBrowser.categories[i].Add(j);
 					}
-					else if (i == (int)ItemBrowserCategories.Armor && (item.headSlot != -1 || item.bodySlot != -1 || item.legSlot != -1))
-					{
+					else if (i == (int)ItemBrowserCategories.Armor && (item.headSlot != -1 || item.bodySlot != -1 || item.legSlot != -1)) {
 						ItemBrowser.categories[i].Add(j);
 					}
-					else if (i == (int)ItemBrowserCategories.Accessories && item.accessory)
-					{
+					else if (i == (int)ItemBrowserCategories.Accessories && item.accessory) {
 						ItemBrowser.categories[i].Add(j);
 					}
-					else if (i == (int)ItemBrowserCategories.Blocks && (item.createTile != -1 || item.createWall != -1))
-					{
+					else if (i == (int)ItemBrowserCategories.Blocks && (item.createTile != -1 || item.createWall != -1)) {
 						ItemBrowser.categories[i].Add(j);
 					}
-					else if (i == (int)ItemBrowserCategories.Ammo && item.ammo != 0)
-					{
+					else if (i == (int)ItemBrowserCategories.Ammo && item.ammo != 0) {
 						ItemBrowser.categories[i].Add(j);
 					}
 					//This also covers hair dyes and some foods
-					else if (i == (int)ItemBrowserCategories.Potions && item.UseSound?.IsTheSameAs(SoundID.Item3) == true)
-					{
+					else if (i == (int)ItemBrowserCategories.Potions && item.UseSound?.IsTheSameAs(SoundID.Item3) == true) {
 						ItemBrowser.categories[i].Add(j);
 					}
-					else if (i == (int)ItemBrowserCategories.Expert && item.expert)
-					{
+					else if (i == (int)ItemBrowserCategories.Expert && item.expert) {
 						ItemBrowser.categories[i].Add(j);
 					}
-					else if (i == (int)ItemBrowserCategories.Furniture && item.createTile != -1)
-					{
+					else if (i == (int)ItemBrowserCategories.Furniture && item.createTile != -1) {
 						ItemBrowser.categories[i].Add(j);
 					}
-					else if (i == (int)ItemBrowserCategories.Pets && (item.buffType > 0 && (Main.vanityPet[item.buffType] || Main.lightPet[item.buffType])))
-					{
+					else if (i == (int)ItemBrowserCategories.Pets && (item.buffType > 0 && (Main.vanityPet[item.buffType] || Main.lightPet[item.buffType]))) {
 						ItemBrowser.categories[i].Add(j);
 					}
-					else if (i == (int)ItemBrowserCategories.Mounts && item.mountType != -1)
-					{
+					else if (i == (int)ItemBrowserCategories.Mounts && item.mountType != -1) {
 						ItemBrowser.categories[i].Add(j);
 					}
 					//else if (i == (int)ItemBrowserCategories.Materials && (itemView.allItemsSlots[j].item.material || itemView.allItemsSlots[j].item.checkMat()))

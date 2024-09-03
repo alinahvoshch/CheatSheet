@@ -1,21 +1,18 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using CheatSheet.Menus;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Reflection;
 using System.Text;
 using Terraria;
-using Terraria.ID;
-using Terraria.GameContent.Liquid;
-using Newtonsoft.Json;
-using CheatSheet.Menus;
-using System.Reflection;
-using Terraria.ModLoader.IO;
-using System.Net;
-using System.Collections.Specialized;
-using Newtonsoft.Json.Linq;
 using Terraria.DataStructures;
-using System.Linq;
+using Terraria.ID;
+using Terraria.ModLoader.IO;
 using Terraria.Social;
 
 namespace CheatSheet
@@ -41,33 +38,26 @@ namespace CheatSheet
 
 		internal static Queue<JObject> schematicsToLoad;
 
-		internal static void GetSchematicsComplete(object sender, UploadValuesCompletedEventArgs e)
-		{
-			if (!e.Cancelled)
-			{
+		internal static void GetSchematicsComplete(object sender, UploadValuesCompletedEventArgs e) {
+			if (!e.Cancelled) {
 				string response = Encoding.UTF8.GetString(e.Result);
 				JObject jsonObject = new JObject();
-				try
-				{
+				try {
 					jsonObject = JObject.Parse(response);
 				}
-				catch (Exception ex)
-				{
+				catch (Exception ex) {
 					Main.NewText("Bad JSON: " + response);
 				}
 				string message = (string)jsonObject["message"];
-				if (message != null)
-				{
+				if (message != null) {
 					Main.NewText(message);
 				}
 				JArray schematicslist = (JArray)jsonObject["schematics"];
-				if (schematicslist != null)
-				{
+				if (schematicslist != null) {
 					schematicsToLoad = new Queue<JObject>();
 					CheatSheet.instance.numberOnlineToLoad = CheatSheet.DefaultNumberOnlineToLoad;
 					//List<PaintToolsSlot> list = new List<PaintToolsSlot>();
-					foreach (JObject schematic in schematicslist.Children<JObject>())
-					{
+					foreach (JObject schematic in schematicslist.Children<JObject>()) {
 						schematicsToLoad.Enqueue(schematic);
 
 						//int id = (int)schematic["id"];
@@ -94,15 +84,13 @@ namespace CheatSheet
 					//	CheatSheet.instance.paintToolsUI.view.Add(list.ToArray());
 				}
 			}
-			else
-			{
+			else {
 				Main.NewText("Schematics Server problem 2");
 			}
 			waiting = false;
 		}
 
-		internal static void LoadSingleSchematic()
-		{
+		internal static void LoadSingleSchematic() {
 			var schematic = schematicsToLoad.Dequeue();
 
 			int id = (int)schematic["id"];
@@ -110,11 +98,9 @@ namespace CheatSheet
 			int rating = (int)schematic["rating"];
 			int vote = (int)schematic["vote"];
 			string tiledata = (string)schematic["tiledata"];
-			try
-			{
+			try {
 				TileData[,] tiles = LoadTilesFromBase64(tiledata);
-				if (tiles.GetLength(0) > 0)
-				{
+				if (tiles.GetLength(0) > 0) {
 					var paintToolsSlot = new PaintToolsSlot(GetStampInfo(tiles));
 					paintToolsSlot.browserID = id;
 					paintToolsSlot.browserName = name;
@@ -131,32 +117,26 @@ namespace CheatSheet
 				schematicsToLoad = null;
 		}
 
-		internal static void OnlineImport(PaintToolsView paintToolsView)
-		{
+		internal static void OnlineImport(PaintToolsView paintToolsView) {
 			// TODO: restore this when online fixed
 			Main.NewText("Online Schematics Database feature has been disabled until further notice");
 			return;
 
-			if (waiting)
-			{
+			if (waiting) {
 				Main.NewText("Be patient");
 				return;
 			}
-			if (CheatSheet.instance.paintToolsUI.view.slotList.Any(x => x.browserID > 0))
-			{
+			if (CheatSheet.instance.paintToolsUI.view.slotList.Any(x => x.browserID > 0)) {
 				Main.NewText("You've already loaded the database");
 				return;
 			}
 			waiting = true;
-			if (SocialAPI.Mode != SocialMode.Steam)
-			{
+			if (SocialAPI.Mode != SocialMode.Steam) {
 				Main.NewText("Online schematics only works on Steam version");
 				return;
 			}
-			try
-			{
-				using (WebClient client = new WebClient())
-				{
+			try {
+				using (WebClient client = new WebClient()) {
 					/* Removed for some reason. GOG users can't use anymore.
 					var steamIDMethodInfo = typeof(Main).Assembly.GetType("Terraria.ModLoader.ModLoader").GetProperty("SteamID64", BindingFlags.Static | BindingFlags.NonPublic);
 					string steamid64 = (string)steamIDMethodInfo.GetValue(null, null);
@@ -171,22 +151,18 @@ namespace CheatSheet
 					client.UploadValuesAsync(schematicsurl, "POST", values);
 				}
 			}
-			catch
-			{
+			catch {
 				Main.NewText("Schematics Server problem 1");
 				waiting = false;
 			}
 		}
 
-		internal static void LoadNextX(PaintToolsView view)
-		{
-			if (waiting)
-			{
+		internal static void LoadNextX(PaintToolsView view) {
+			if (waiting) {
 				Main.NewText("Wait for schematics to download first.");
 				return;
 			}
-			if(PaintToolsEx.schematicsToLoad == null)
-			{
+			if (PaintToolsEx.schematicsToLoad == null) {
 				Main.NewText("Load online schematics database first.");
 				return;
 			}
@@ -194,13 +170,10 @@ namespace CheatSheet
 			CheatSheet.instance.numberOnlineToLoad = CheatSheet.DefaultNumberOnlineToLoad;
 		}
 
-		internal static void Import(PaintToolsView paintToolsView)
-		{
-			try
-			{
+		internal static void Import(PaintToolsView paintToolsView) {
+			try {
 				List<PaintToolsSlot> list = new List<PaintToolsSlot>();
-				foreach (var line in File.ReadAllLines(importPath, Encoding.UTF8))
-				{
+				foreach (var line in File.ReadAllLines(importPath, Encoding.UTF8)) {
 					TileData[,] tiles = JsonConvert.DeserializeObject<TileData[,]>(File.ReadAllText(line, Encoding.UTF8));
 					list.Add(new PaintToolsSlot(GetStampInfo(tiles)));
 				}
@@ -212,14 +185,12 @@ namespace CheatSheet
 		static MethodInfo LoadTilesMethodInfo;
 		static MethodInfo LoadWorldTilesVanillaMethodInfo;
 
-		public static TileData[,] LoadTilesFromBase64(string data)
-		{
+		public static TileData[,] LoadTilesFromBase64(string data) {
 			int oldX = Main.maxTilesX;
 			int oldY = Main.maxTilesY;
 			// TODO: This feature is remove for now, this line needs to be restored: Tile[,] oldTiles = Main.tile;
 			TileData[,] loadedTiles = new TileData[0, 0];
-			try
-			{
+			try {
 				TagCompound tagCompound = TagIO.FromStream(new MemoryStream(Convert.FromBase64String(data)));
 				if (LoadTilesMethodInfo == null)
 					LoadTilesMethodInfo = typeof(Main).Assembly.GetType("Terraria.ModLoader.IO.TileIO").GetMethod("LoadTiles", BindingFlags.Static | BindingFlags.NonPublic);
@@ -238,16 +209,13 @@ namespace CheatSheet
 						loadedTiles[i, j] = new TileData();
 				// TODO: This feature is remove for now, this line needs to be restored: Main.tile = loadedTiles;
 
-				using (MemoryStream memoryStream = new MemoryStream(tagCompound.GetByteArray("v")))
-				{
-					using (BinaryReader binaryReader = new BinaryReader(memoryStream))
-					{
+				using (MemoryStream memoryStream = new MemoryStream(tagCompound.GetByteArray("v"))) {
+					using (BinaryReader binaryReader = new BinaryReader(memoryStream)) {
 						LoadWorldTilesVanillaMethodInfo.Invoke(null, new object[] { binaryReader, importance });
 					}
 				}
 
-				if (tagCompound.ContainsKey("m"))
-				{
+				if (tagCompound.ContainsKey("m")) {
 					LoadTilesMethodInfo.Invoke(null, new object[] { tagCompound["m"] });
 				}
 
@@ -263,22 +231,18 @@ namespace CheatSheet
 							loadedTilesExpanded[i, j] = Main.tile[i - 6, j - 6];
 				// TODO: This feature is remove for now, this line needs to be restored: Main.tile = loadedTilesExpanded;
 
-				for (int i = 0; i < Main.maxTilesX; i++)
-				{
-					for (int j = 0; j < Main.maxTilesY; j++)
-					{
+				for (int i = 0; i < Main.maxTilesX; i++) {
+					for (int j = 0; j < Main.maxTilesY; j++) {
 						//WorldGen.TileFrame(i, j, true, false);
 
 						//if (i > 5 && j > 5 && i < Main.maxTilesX - 5 && j < Main.maxTilesY - 5
 						// 0 needs to be 6 ,   MaxX == 5, 4 index, 
 						// need tp add 6?       4(10) < 5(11) - 5
 
-						if (Main.tile[i, j].HasTile)
-						{
+						if (Main.tile[i, j].HasTile) {
 							WorldGen.TileFrame(i, j, true, false);
 						}
-						if (Main.tile[i, j].WallType > 0)
-						{
+						if (Main.tile[i, j].WallType > 0) {
 							Framing.WallFrame(i, j, true);
 						}
 					}
@@ -294,14 +258,12 @@ namespace CheatSheet
 		static MethodInfo SaveTilesMethodInfo;
 		static MethodInfo SaveWorldTilesVanillaMethodInfo;
 
-		public static string SaveTilesToBase64(TileData[,] tiles)
-		{
+		public static string SaveTilesToBase64(TileData[,] tiles) {
 			int oldX = Main.maxTilesX;
 			int oldY = Main.maxTilesY;
 			// TODO: This feature is remove for now, this line needs to be restored: Tile[,] oldTiles = Main.tile;
 			string base64result = "";
-			try
-			{
+			try {
 				Main.maxTilesX = tiles.GetLength(0);
 				Main.maxTilesY = tiles.GetLength(1);
 				// TODO: This feature is remove for now, this line needs to be restored: Main.tile = tiles;
@@ -313,17 +275,14 @@ namespace CheatSheet
 				TagCompound ModTileData = (TagCompound)SaveTilesMethodInfo.Invoke(null, null);
 
 				byte[] array = null;
-				using (MemoryStream memoryStream = new MemoryStream(7000000))
-				{
-					using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
-					{
+				using (MemoryStream memoryStream = new MemoryStream(7000000)) {
+					using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream)) {
 						int rval = (int)SaveWorldTilesVanillaMethodInfo.Invoke(null, new object[] { binaryWriter });
 						array = memoryStream.ToArray();
 					}
 				}
 
-				TagCompound result = new TagCompound()
-				{
+				TagCompound result = new TagCompound() {
 					["d"] = new Point16(Main.maxTilesX, Main.maxTilesY),
 					["v"] = array,
 					["m"] = ModTileData,
@@ -339,15 +298,12 @@ namespace CheatSheet
 			return base64result;
 		}
 
-		public static void Export(PaintToolsView paintToolsView)
-		{
-			try
-			{
+		public static void Export(PaintToolsView paintToolsView) {
+			try {
 				int index = 1;
 				string path;
 				List<string> list = new List<string>();
-				foreach (var slot in paintToolsView.slotList)
-				{
+				foreach (var slot in paintToolsView.slotList) {
 					path = $@"{exportPath}\CheatSheet_PaintTools_{index++}.json";
 					list.Add(path);
 					File.WriteAllText(path, JsonConvert.SerializeObject(slot.stampInfo.Tiles), Encoding.UTF8);
@@ -359,8 +315,7 @@ namespace CheatSheet
 			catch { }
 		}
 
-		public static StampInfo GetStampInfo(TileData[,] Tiles)
-		{
+		public static StampInfo GetStampInfo(TileData[,] Tiles) {
 			int maxTile = ModUtils.TextureMaxTile;
 
 			StampInfo result = new StampInfo();
@@ -377,15 +332,11 @@ namespace CheatSheet
 			result.Width = maxX * 16;
 			result.Height = maxY * 16;
 
-			for (int x = 0; x < texMaxX; x++)
-			{
-				for (int y = 0; y < texMaxY; y++)
-				{
+			for (int x = 0; x < texMaxX; x++) {
+				for (int y = 0; y < texMaxY; y++) {
 					TileData[,] tiles = new TileData[x < texMaxX - 1 ? maxTile : restX, y < texMaxY - 1 ? maxTile : restY];
-					for (int i = 0; i < tiles.GetLength(0); i++)
-					{
-						for (int j = 0; j < tiles.GetLength(1); j++)
-						{
+					for (int i = 0; i < tiles.GetLength(0); i++) {
+						for (int j = 0; j < tiles.GetLength(1); j++) {
 							tiles[i, j] = Tiles[x * maxTile + i, y * maxTile + j];
 						}
 					}

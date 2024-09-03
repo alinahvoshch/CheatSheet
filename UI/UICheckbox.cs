@@ -13,13 +13,10 @@ namespace CheatSheet.UI
 
 		private bool selected = false;
 
-		public bool Selected
-		{
+		public bool Selected {
 			get { return selected; }
-			set
-			{
-				if (value != selected)
-				{
+			set {
+				if (value != selected) {
 					selected = value;
 					if (SelectedChanged != null)
 						SelectedChanged(this, EventArgs.Empty);
@@ -27,8 +24,7 @@ namespace CheatSheet.UI
 			}
 		}
 
-		public string Text
-		{
+		public string Text {
 			get { return label.Text; }
 			set { label.Text = value; }
 		}
@@ -39,8 +35,7 @@ namespace CheatSheet.UI
 
 		internal UILabel label;
 
-		public UICheckbox(string text)
-		{
+		public UICheckbox(string text) {
 			checkboxTexture = CheatSheet.instance.Assets.Request<Texture2D>("UI/checkBox", AssetRequestMode.ImmediateLoad);
 			checkmarkTexture = CheatSheet.instance.Assets.Request<Texture2D>("UI/checkMark", AssetRequestMode.ImmediateLoad);
 
@@ -51,23 +46,19 @@ namespace CheatSheet.UI
 			this.onLeftClick += new EventHandler(UICheckbox_onLeftClick);
 		}
 
-		private void UICheckbox_onLeftClick(object sender, EventArgs e)
-		{
+		private void UICheckbox_onLeftClick(object sender, EventArgs e) {
 			this.Selected = !Selected;
 		}
 
-		protected override float GetHeight()
-		{
+		protected override float GetHeight() {
 			return label.Height;
 		}
 
-		protected override float GetWidth()
-		{
+		protected override float GetWidth() {
 			return checkboxTexture.Width() + spacing + label.Width;
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
+		public override void Draw(SpriteBatch spriteBatch) {
 			Vector2 pos = DrawPosition + new Vector2(0, (float)label.Height / 2 - (float)checkboxTexture.Height() / 1.2f);
 			spriteBatch.Draw(checkboxTexture.Value, pos, null, Color.White, 0f, Origin, 1f, SpriteEffects.None, 0f);
 			if (Selected)

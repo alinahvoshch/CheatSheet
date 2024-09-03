@@ -24,8 +24,7 @@ namespace CheatSheet.Menus
 
 		private CheatSheet mod;
 
-		public QuickClearHotbar(CheatSheet mod)
-		{
+		public QuickClearHotbar(CheatSheet mod) {
 			this.mod = mod;
 			//parentHotbar = mod.hotbar;
 
@@ -49,28 +48,22 @@ namespace CheatSheet.Menus
 			bDebuffs.Tooltip = CSText("ClearDebuffs");
 
 			// Button EventHandlers
-			bItems.onLeftClick += (s, e) =>
-			{
+			bItems.onLeftClick += (s, e) => {
 				HandleQuickClear();
 			};
-			bProjectiles.onLeftClick += (s, e) =>
-			{
+			bProjectiles.onLeftClick += (s, e) => {
 				HandleQuickClear(1);
 			};
-			bBuffs.onLeftClick += (s, e) =>
-			{
+			bBuffs.onLeftClick += (s, e) => {
 				HandleQuickClear(2);
 			};
-			bDebuffs.onLeftClick += (s, e) =>
-			{
+			bDebuffs.onLeftClick += (s, e) => {
 				HandleQuickClear(3);
 			};
 
 			// Register mousedown
-			onMouseDown += (s, e) =>
-			{
-				if (!Main.LocalPlayer.mouseInterface && !mod.hotbar.MouseInside && !mod.hotbar.button.MouseInside)
-				{
+			onMouseDown += (s, e) => {
+				if (!Main.LocalPlayer.mouseInterface && !mod.hotbar.MouseInside && !mod.hotbar.button.MouseInside) {
 					mouseDown = true;
 					Main.LocalPlayer.mouseInterface = true;
 				}
@@ -91,8 +84,7 @@ namespace CheatSheet.Menus
 			base.Position = new Vector2(Hotbar.xPosition, this.hiddenPosition);
 			base.CenterXAxisToParentCenter();
 			float num = this.spacing;
-			for (int i = 0; i < this.buttonView.children.Count; i++)
-			{
+			for (int i = 0; i < this.buttonView.children.Count; i++) {
 				this.buttonView.children[i].Anchor = AnchorPosition.Left;
 				this.buttonView.children[i].Position = new Vector2(num, 0f);
 				this.buttonView.children[i].CenterYAxisToParentCenter();
@@ -103,41 +95,33 @@ namespace CheatSheet.Menus
 			this.Resize();
 		}
 
-		public static void HandleQuickClear(int clearType = 0, bool forceHandle = false, int whoAmI = 0)
-		{
+		public static void HandleQuickClear(int clearType = 0, bool forceHandle = false, int whoAmI = 0) {
 			bool syncData = forceHandle || Main.netMode == 0;
-			if (syncData)
-			{
+			if (syncData) {
 				ClearObjects(clearType, forceHandle, whoAmI);
 			}
-			else
-			{
+			else {
 				SyncQuickClear(clearType);
 			}
 		}
 
-		private static void SyncQuickClear(int clearType = 0)
-		{
+		private static void SyncQuickClear(int clearType = 0) {
 			var netMessage = CheatSheet.instance.GetPacket();
 			netMessage.Write((byte)CheatSheetMessageType.QuickClear);
 			netMessage.Write(clearType);
 			netMessage.Send();
 		}
 
-		private static void ClearObjects(int clearType = 0, bool syncData = false, int whoAmI = 0)
-		{
+		private static void ClearObjects(int clearType = 0, bool syncData = false, int whoAmI = 0) {
 			Player player;
-			if (!syncData)
-			{
+			if (!syncData) {
 				player = Main.LocalPlayer;
 			}
-			else
-			{
+			else {
 				player = Main.player[whoAmI];
 			}
 
-			switch (clearType)
-			{
+			switch (clearType) {
 				case 0:
 					HandleClearItems(syncData);
 					break;
@@ -159,57 +143,43 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		private static void HandleClearItems(bool syncData = false)
-		{
-			for (int i = 0; i < Main.maxItems; i++)
-			{
-				if (!syncData)
-				{
+		private static void HandleClearItems(bool syncData = false) {
+			for (int i = 0; i < Main.maxItems; i++) {
+				if (!syncData) {
 					Main.item[i].active = false;
 				}
-				else
-				{
+				else {
 					Main.item[i].SetDefaults(0);
 					NetMessage.SendData(21, -1, -1, null, i, 0f, 0f, 0f, 0);
 				}
 			}
 		}
 
-		public static void HandleClearProjectiles(bool syncData = false)
-		{
-			for (int i = 0; i < Main.maxProjectiles; i++)
-			{
-				if (Main.projectile[i].active)
-				{
+		public static void HandleClearProjectiles(bool syncData = false) {
+			for (int i = 0; i < Main.maxProjectiles; i++) {
+				if (Main.projectile[i].active) {
 					Main.projectile[i].Kill();
 					//Main.projectile[i].SetDefaults(0);
-					if (syncData)
-					{
+					if (syncData) {
 						NetMessage.SendData(27, -1, -1, null, i, 0f, 0f, 0f, 0);
 					}
 				}
 			}
 		}
 
-		public static void HandleClearBuffs(Player player, bool debuffsOnly = false)
-		{
+		public static void HandleClearBuffs(Player player, bool debuffsOnly = false) {
 			// buffs are only syncing when added for PvP
-			for (int b = 0; b < 22; b++)
-			{
-				if (debuffsOnly && (!Main.debuff[player.buffType[b]])) continue;
+			for (int b = 0; b < 22; b++) {
+				if (debuffsOnly && (!Main.debuff[player.buffType[b]]))
+					continue;
 
-				if (player.buffType[b] > 0)
-				{
+				if (player.buffType[b] > 0) {
 					player.buffTime[b] = 0;
 					player.buffType[b] = 0;
-					if (debuffsOnly)
-					{
-						for (int i = 0; i < 21; i++)
-						{
-							if (player.buffTime[i] == 0 || player.buffType[i] == 0)
-							{
-								for (int j = i + 1; j < 22; j++)
-								{
+					if (debuffsOnly) {
+						for (int i = 0; i < 21; i++) {
+							if (player.buffTime[i] == 0 || player.buffType[i] == 0) {
+								for (int j = i + 1; j < 22; j++) {
 									player.buffTime[j - 1] = player.buffTime[j];
 									player.buffType[j - 1] = player.buffType[j];
 									player.buffTime[j] = 0;
@@ -222,18 +192,15 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		public override void Update()
-		{
+		public override void Update() {
 			DoSlideMovement();
 
 			base.CenterXAxisToParentCenter();
 			base.Update();
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			if (Visible)
-			{
+		public override void Draw(SpriteBatch spriteBatch) {
+			if (Visible) {
 				spriteBatch.End();
 				spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, this._rasterizerState, null, Main.UIScaleMatrix);
 				//	Rectangle scissorRectangle = new Rectangle((int)base.X- (int)base.Width, (int)base.Y, (int)base.Width, (int)base.Height);
@@ -272,42 +239,34 @@ namespace CheatSheet.Menus
 
 			//	base.Draw(spriteBatch);
 
-			if (Visible && (base.IsMouseInside() /*|| button.MouseInside*/))
-			{
+			if (Visible && (base.IsMouseInside() /*|| button.MouseInside*/)) {
 				Main.LocalPlayer.mouseInterface = true;
 				//Main.LocalPlayer.showItemIcon = false;
 			}
 
-			if (Visible && IsMouseInside())
-			{
+			if (Visible && IsMouseInside()) {
 				Main.LocalPlayer.mouseInterface = true;
 			}
 
 			float x = FontAssets.MouseText.Value.MeasureString(UIView.HoverText).X;
 			Vector2 vector = new Vector2((float)Main.mouseX, (float)Main.mouseY) + new Vector2(16f);
-			if (vector.Y > (float)(Main.screenHeight - 30))
-			{
+			if (vector.Y > (float)(Main.screenHeight - 30)) {
 				vector.Y = (float)(Main.screenHeight - 30);
 			}
-			if (vector.X > (float)Main.screenWidth - x)
-			{
+			if (vector.X > (float)Main.screenWidth - x) {
 				vector.X = (float)(Main.screenWidth - 460);
 			}
 			Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.MouseText.Value, UIView.HoverText, vector.X, vector.Y, new Color((int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor), Color.Black, Vector2.Zero, 1f);
 		}
 
-		protected override bool IsMouseInside()
-		{
+		protected override bool IsMouseInside() {
 			return hidden ? false : base.IsMouseInside();
 		}
 
-		public void Resize()
-		{
+		public void Resize() {
 			float num = this.spacing;
-			for (int i = 0; i < this.buttonView.children.Count; i++)
-			{
-				if (this.buttonView.children[i].Visible)
-				{
+			for (int i = 0; i < this.buttonView.children.Count; i++) {
+				if (this.buttonView.children[i].Visible) {
 					this.buttonView.children[i].X = num;
 					num += this.buttonView.children[i].Width + this.spacing;
 				}
@@ -316,14 +275,12 @@ namespace CheatSheet.Menus
 			this.buttonView.Width = base.Width;
 		}
 
-		public void Hide()
-		{
+		public void Hide() {
 			hidden = true;
 			arrived = false;
 		}
 
-		public void Show()
-		{
+		public void Show() {
 			mod.hotbar.currentHotbar = this;
 			arrived = false;
 			hidden = false;

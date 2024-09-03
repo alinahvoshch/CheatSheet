@@ -8,15 +8,11 @@ using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using Terraria;
-using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.Social;
 
 namespace CheatSheet.Menus
@@ -55,8 +51,7 @@ namespace CheatSheet.Menus
 
 		internal static bool needsUpdate = true;
 
-		public PaintToolsUI(CheatSheet mod)
-		{
+		public PaintToolsUI(CheatSheet mod) {
 			categories.Clear();
 			this.view = new PaintToolsView();
 			this.mod = mod;
@@ -210,51 +205,41 @@ namespace CheatSheet.Menus
 
 		private static Uri submiturl = new Uri("http://javid.ddns.net/tModLoader/jopojellymods/CheatSheet_Schematics_Submit.php");
 		private static bool submitWait = false;
-		private void Submit()
-		{
+		private void Submit() {
 			if (PaintToolsSlot.CurrentSelect == null)
 				return;
-			if (PaintToolsSlot.CurrentSelect.browserID == -1)
-			{
+			if (PaintToolsSlot.CurrentSelect.browserID == -1) {
 				Main.NewText(CSTextSB("AlreadySubmitted"));
 				return;
 			}
 			if (PaintToolsSlot.CurrentSelect.browserID != 0)
 				return;
-			if (submitWait)
-			{
+			if (submitWait) {
 				Main.NewText(CSTextSB("BePatient"));
 				return;
 			}
-			if (SocialAPI.Mode != SocialMode.Steam)
-			{
+			if (SocialAPI.Mode != SocialMode.Steam) {
 				Main.NewText(CSTextSB("OnlineSchematicsOnlyWorksOnSteamVersion"));
 				return;
 			}
-			try
-			{
-				using (WebClient client = new WebClient())
-				{
+			try {
+				using (WebClient client = new WebClient()) {
 					/*
 					var steamIDMethodInfo = typeof(Main).Assembly.GetType("Terraria.ModLoader.ModLoader").GetProperty("SteamID64", BindingFlags.Static | BindingFlags.NonPublic);
 					string steamid64 = (string)steamIDMethodInfo.GetValue(null, null);
 					*/
 					string steamid64 = Steamworks.SteamUser.GetSteamID().ToString();
 					string base64tiles = PaintToolsEx.SaveTilesToBase64(PaintToolsSlot.CurrentSelect.stampInfo.Tiles);
-					if (string.IsNullOrEmpty(base64tiles))
-					{
+					if (string.IsNullOrEmpty(base64tiles)) {
 						Main.NewText(CSTextSB("OopsBase64TilesIsBad"));
 					}
-					else if (string.IsNullOrEmpty(submitInput.Text))
-					{
+					else if (string.IsNullOrEmpty(submitInput.Text)) {
 						Main.NewText(CSTextSB("PleaseNameYourCreation"));
 					}
-					else if (base64tiles.Length > 5000)
-					{
+					else if (base64tiles.Length > 5000) {
 						Main.NewText(CSTextSB("SelectionTooBigForNow"));
 					}
-					else
-					{
+					else {
 						submitWait = true;
 						var values = new NameValueCollection
 						{
@@ -270,37 +255,29 @@ namespace CheatSheet.Menus
 					}
 				}
 			}
-			catch
-			{
+			catch {
 				Main.NewText(Language.GetTextValue($"Mods.CheatSheet.SchematicsBrowser.SchematicsServerProblemX", 5));
 				submitWait = false;
 			}
 		}
 
-		private void SubmitComplete(object sender, UploadValuesCompletedEventArgs e)
-		{
-			try
-			{
-				if (!e.Cancelled)
-				{
+		private void SubmitComplete(object sender, UploadValuesCompletedEventArgs e) {
+			try {
+				if (!e.Cancelled) {
 					string response = Encoding.UTF8.GetString(e.Result);
 					JObject jsonObject = JObject.Parse(response);
-					if (jsonObject["message"] != null)
-					{
+					if (jsonObject["message"] != null) {
 						Main.NewText((string)jsonObject["message"]);
 					}
-					else
-					{
+					else {
 						Main.NewText(Language.GetTextValue($"Mods.CheatSheet.SchematicsBrowser.SchematicsServerProblemX", 12));
 					}
 				}
-				else
-				{
+				else {
 					Main.NewText(Language.GetTextValue($"Mods.CheatSheet.SchematicsBrowser.SchematicsServerProblemX", 2));
 				}
 			}
-			catch
-			{
+			catch {
 				Main.NewText(Language.GetTextValue($"Mods.CheatSheet.SchematicsBrowser.SchematicsServerProblemX", 3));
 			}
 			submitWait = false;
@@ -308,14 +285,12 @@ namespace CheatSheet.Menus
 
 		private static Uri voteurl = new Uri("http://javid.ddns.net/tModLoader/jopojellymods/CheatSheet_Schematics_Vote.php");
 
-		private void Vote(bool up)
-		{
+		private void Vote(bool up) {
 			if (PaintToolsSlot.CurrentSelect == null)
 				return;
 
 			int voteInt = up ? 1 : -1;
-			if (PaintToolsSlot.CurrentSelect.vote == voteInt)
-			{
+			if (PaintToolsSlot.CurrentSelect.vote == voteInt) {
 				Main.NewText(CSTextSB("YouAlreadyVoted"));
 				return;
 			}
@@ -329,15 +304,12 @@ namespace CheatSheet.Menus
 				CheatSheet.instance.paintToolsUI.upVoteButton.ForegroundColor = Color.Gray;
 			if (PaintToolsSlot.CurrentSelect.vote == -1)
 				CheatSheet.instance.paintToolsUI.downVoteButton.ForegroundColor = Color.Gray;
-			if (SocialAPI.Mode != SocialMode.Steam)
-			{
+			if (SocialAPI.Mode != SocialMode.Steam) {
 				Main.NewText(CSTextSB("OnlineSchematicsOnlyWorksOnSteamVersion"));
 				return;
 			}
-			try
-			{
-				using (WebClient client = new WebClient())
-				{
+			try {
+				using (WebClient client = new WebClient()) {
 					/*
 					var steamIDMethodInfo = typeof(Main).Assembly.GetType("Terraria.ModLoader.ModLoader").GetProperty("SteamID64", BindingFlags.Static | BindingFlags.NonPublic);
 					string steamid64 = (string)steamIDMethodInfo.GetValue(null, null);
@@ -354,49 +326,39 @@ namespace CheatSheet.Menus
 					client.UploadValuesAsync(voteurl, "POST", values);
 				}
 			}
-			catch
-			{
+			catch {
 			}
 		}
 
-		internal static void VoteComplete(object sender, UploadValuesCompletedEventArgs e)
-		{
-			if (!e.Cancelled)
-			{
+		internal static void VoteComplete(object sender, UploadValuesCompletedEventArgs e) {
+			if (!e.Cancelled) {
 				Main.NewText(CSTextSB("ThanksForVoting"));
 			}
-			else
-			{
+			else {
 				Main.NewText(CSTextSB("SchematicsServerVotingProblem"));
 			}
 		}
 
-		public SnapType SnapType
-		{
-			get
-			{
+		public SnapType SnapType {
+			get {
 				return btnSnap.GetValue<SnapType>();
 			}
 		}
 
-		public void AddSlot(StampInfo stampInfo)
-		{
+		public void AddSlot(StampInfo stampInfo) {
 			view.Add(new PaintToolsSlot(stampInfo));
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
+		public override void Draw(SpriteBatch spriteBatch) {
 			base.Draw(spriteBatch);
 
-			if (Visible && IsMouseInside())
-			{
+			if (Visible && IsMouseInside()) {
 				Main.LocalPlayer.mouseInterface = true;
 				Main.LocalPlayer.cursorItemIconEnabled = false;
 			}
 		}
 
-		private void bClose_onLeftClick(object sender, EventArgs e)
-		{
+		private void bClose_onLeftClick(object sender, EventArgs e) {
 			Hide();
 			mod.paintToolsHotbar.Hide();
 			mod.hotbar.DisableAllWindows();
@@ -427,8 +389,7 @@ namespace CheatSheet.Menus
 		public int constrainedX;
 		public int constrainedY;
 
-		public static Vector2 GetSnapPosition(SnapType type, int width, int height, bool constrainToAxis, int constrainedX, int constrainedY, bool resultTilePosition)
-		{
+		public static Vector2 GetSnapPosition(SnapType type, int width, int height, bool constrainToAxis, int constrainedX, int constrainedY, bool resultTilePosition) {
 			Snap snap = new Snap();
 			snap.type = type;
 			snap.width = width;
@@ -440,26 +401,21 @@ namespace CheatSheet.Menus
 			return snap.GetSnapPosition();
 		}
 
-		public Vector2 GetSnapPosition()
-		{
+		public Vector2 GetSnapPosition() {
 			Vector2 result = position;
 			Vector2 evenOffset = Vector2.Zero;
-			if (width % 2 == 0 && (type == SnapType.TopCenter || type == SnapType.Center || type == SnapType.BottomCenter))
-			{
+			if (width % 2 == 0 && (type == SnapType.TopCenter || type == SnapType.Center || type == SnapType.BottomCenter)) {
 				evenOffset.X = 1;
 			}
-			if (height % 2 == 0 && (type == SnapType.LeftCenter || type == SnapType.Center || type == SnapType.RightCenter))
-			{
+			if (height % 2 == 0 && (type == SnapType.LeftCenter || type == SnapType.Center || type == SnapType.RightCenter)) {
 				evenOffset.Y = 1;
 			}
 			position = (Main.MouseWorld + evenOffset * 8).ToTileCoordinates().ToVector2();
 			int halfWidth = width / 2;
 			int halfHeight = height / 2;
 			SnapType snapType = type;
-			if (Main.LocalPlayer.gravDir == -1f)
-			{
-				switch (snapType)
-				{
+			if (Main.LocalPlayer.gravDir == -1f) {
+				switch (snapType) {
 					case SnapType.TopLeft:
 						snapType = SnapType.BottomLeft;
 						break;
@@ -480,8 +436,7 @@ namespace CheatSheet.Menus
 						break;
 				}
 			}
-			switch (snapType)
-			{
+			switch (snapType) {
 				case SnapType.TopLeft:
 					break;
 				case SnapType.TopCenter:
@@ -510,23 +465,18 @@ namespace CheatSheet.Menus
 					break;
 			}
 
-			if (constrainToAxis)
-			{
-				if (constrainedX != -1)
-				{
+			if (constrainToAxis) {
+				if (constrainedX != -1) {
 					position.X = constrainedX;
 				}
-				if (constrainedY != -1)
-				{
+				if (constrainedY != -1) {
 					position.Y = constrainedY;
 				}
 			}
 
-			if (!resultTilePosition)
-			{
+			if (!resultTilePosition) {
 				position = (position * 16f) - Main.screenPosition;
-				if (Main.LocalPlayer.gravDir == -1f)
-				{
+				if (Main.LocalPlayer.gravDir == -1f) {
 					position.Y = (float)Main.screenHeight - position.Y;
 					position.Y -= height * 16;
 				}

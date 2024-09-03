@@ -20,100 +20,78 @@ namespace CheatSheet.UI
 
 		public bool CanMove;
 
-		public bool ClickAndDrag
-		{
-			get
-			{
+		public bool ClickAndDrag {
+			get {
 				return this.clickAndDrag;
 			}
-			set
-			{
+			set {
 				this.clickAndDrag = value;
 			}
 		}
 
-		public UIWindow()
-		{
+		public UIWindow() {
 			base.BackgroundColor = new Color(33, 15, 91, 255) * 0.685f;
 			base.onMouseDown += new UIView.ClickEventHandler(this.UIWindow_onMouseDown);
 			base.onMouseUp += new UIView.ClickEventHandler(this.UIWindow_onMouseUp);
 		}
 
-		private void UIWindow_onMouseUp(object sender, byte button)
-		{
-			if (this.dragging)
-			{
+		private void UIWindow_onMouseUp(object sender, byte button) {
+			if (this.dragging) {
 				this.dragging = false;
 			}
 		}
 
-		private void UIWindow_onMouseDown(object sender, byte button)
-		{
-			if (this.CanMove && button == 0)
-			{
+		private void UIWindow_onMouseDown(object sender, byte button) {
+			if (this.CanMove && button == 0) {
 				this.dragging = true;
 				this.dragAnchor = new Vector2((float)UIView.MouseX, (float)UIView.MouseY) - base.DrawPosition;
 			}
 		}
 
-		protected override void SetWidth(float width)
-		{
+		protected override void SetWidth(float width) {
 			this.width = width;
 		}
 
-		protected override void SetHeight(float height)
-		{
+		protected override void SetHeight(float height) {
 			this.height = height;
 		}
 
-		protected override float GetHeight()
-		{
+		protected override float GetHeight() {
 			return this.height;
 		}
 
-		protected override float GetWidth()
-		{
+		protected override float GetWidth() {
 			return this.width;
 		}
 
-		public override void Update()
-		{
+		public override void Update() {
 			base.Update();
-			if (this.dragging)
-			{
+			if (this.dragging) {
 				base.Position = new Vector2((float)UIView.MouseX, (float)UIView.MouseY) - this.dragAnchor;
-				if (this._constrainInsideParent)
-				{
-					if (base.Position.X - base.Origin.X < 0f)
-					{
+				if (this._constrainInsideParent) {
+					if (base.Position.X - base.Origin.X < 0f) {
 						base.X = base.Origin.X;
 					}
-					else if (base.Position.X + base.Width - base.Origin.X > base.Parent.Width)
-					{
+					else if (base.Position.X + base.Width - base.Origin.X > base.Parent.Width) {
 						base.X = base.Parent.Width - base.Width + base.Origin.X;
 					}
-					if (base.Y - base.Origin.Y < 0f)
-					{
+					if (base.Y - base.Origin.Y < 0f) {
 						base.Y = base.Origin.Y;
 						return;
 					}
-					if (base.Y + base.Height - base.Origin.Y > base.Parent.Height)
-					{
+					if (base.Y + base.Height - base.Origin.Y > base.Parent.Height) {
 						base.Y = base.Parent.Height - base.Height + base.Origin.Y;
 					}
 				}
 			}
 
-			if (IsMouseInside())
-			{
+			if (IsMouseInside()) {
 				Terraria.GameInput.PlayerInput.LockVanillaMouseScroll("CheatSheet/UIWindow");
 			}
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			if (base.Visible)
-			{
+		public override void Draw(SpriteBatch spriteBatch) {
+			if (base.Visible) {
 				Utils.DrawInvBG(spriteBatch, base.DrawPosition.X - base.Origin.X, base.DrawPosition.Y - base.Origin.Y, base.Width, base.Height, base.BackgroundColor);
 			}
 			base.Draw(spriteBatch);

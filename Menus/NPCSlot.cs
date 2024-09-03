@@ -31,19 +31,16 @@ namespace CheatSheet.Menus
 		public bool functionalSlot;
 		private bool rightClicking;
 
-		public NPCSlot(Vector2 position, int npcNum, int index)
-		{
+		public NPCSlot(Vector2 position, int npcNum, int index) {
 			base.Position = position;
 			this.Init(npcNum, index);
 		}
 
-		public NPCSlot(int npcNum, int index)
-		{
+		public NPCSlot(int npcNum, int index) {
 			this.Init(npcNum, index);
 		}
 
-		private void Init(int npcNum, int index)
-		{
+		private void Init(int npcNum, int index) {
 			//npcType = npcNum;
 			base.Scale = 0.85f;
 			this.index = index;
@@ -60,10 +57,8 @@ namespace CheatSheet.Menus
 			//	this.isTown = npc.townNPC;
 			//	ErrorLogger.Log("sD" + npcNum + " " + npc.type + " " + npc.boss);
 			base.onLeftClick += new EventHandler(this.Slot2_onLeftClick);
-			base.onRightClick += (s, e) =>
-			{
-				if (Main.netMode == 1)
-				{
+			base.onRightClick += (s, e) => {
+				if (Main.netMode == 1) {
 					// in MP, we request an npc be filtered.
 					var message = CheatSheet.instance.GetPacket();
 					message.Write((byte)CheatSheetMessageType.RequestFilterNPC);
@@ -71,8 +66,7 @@ namespace CheatSheet.Menus
 					message.Write(!isFiltered);
 					message.Send();
 				}
-				else
-				{
+				else {
 					// in SP, we filter, mark browser as dirty, then save.
 					bool desired = !isFiltered;
 					NPCBrowser.FilterNPC(netID, desired);
@@ -83,18 +77,15 @@ namespace CheatSheet.Menus
 			base.onHover += new EventHandler(this.Slot2_onHover);
 		}
 
-		protected override float GetWidth()
-		{
+		protected override float GetWidth() {
 			return (float)Slot.backgroundTexture.Width() * base.Scale;
 		}
 
-		protected override float GetHeight()
-		{
+		protected override float GetHeight() {
 			return (float)Slot.backgroundTexture.Height() * base.Scale;
 		}
 
-		private void Slot2_onHover(object sender, EventArgs e)
-		{
+		private void Slot2_onHover(object sender, EventArgs e) {
 			UIView.HoverText = displayName.Value + (npc.ModNPC != null ? " [" + npc.ModNPC.Mod.Name + "]" : "") + (isFiltered ? " [DISABLED]" : "");
 			NPCBrowser.hoverNpc = npc;
 			//UIView.HoverItem = this.item.Clone();
@@ -106,9 +97,9 @@ namespace CheatSheet.Menus
 		//	if(UIView.)
 		//}
 
-		private void Slot2_onLeftClick(object sender, EventArgs e)
-		{
-			if (isFiltered) return;
+		private void Slot2_onLeftClick(object sender, EventArgs e) {
+			if (isFiltered)
+				return;
 			HandleNPC(npcType, netID, false);
 		}
 
@@ -206,21 +197,17 @@ namespace CheatSheet.Menus
 		//	}
 		//}
 
-		public static void HandleNPC(int type, int syncID = 0, bool forceHandle = false, int whoAmI = 0)
-		{
+		public static void HandleNPC(int type, int syncID = 0, bool forceHandle = false, int whoAmI = 0) {
 			bool syncData = forceHandle || Main.netMode == 0;
-			if (syncData)
-			{
+			if (syncData) {
 				SpawnNPC(type, forceHandle, syncID, whoAmI);
 			}
-			else
-			{
+			else {
 				SyncNPC(type, syncID);
 			}
 		}
 
-		private static void SyncNPC(int type, int syncID = 0)
-		{
+		private static void SyncNPC(int type, int syncID = 0) {
 			var netMessage = CheatSheet.instance.GetPacket();
 			netMessage.Write((byte)CheatSheetMessageType.SpawnNPC);
 			netMessage.Write(type);
@@ -228,30 +215,25 @@ namespace CheatSheet.Menus
 			netMessage.Send();
 		}
 
-		private static void SpawnNPC(int type, bool syncData = false, int syncID = 0, int whoAmI = 0)
-		{
+		private static void SpawnNPC(int type, bool syncData = false, int syncID = 0, int whoAmI = 0) {
 			Player player;
-			if (!syncData)
-			{
+			if (!syncData) {
 				player = Main.LocalPlayer;
 			}
-			else
-			{
+			else {
 				player = Main.player[whoAmI];
 			}
 			int x = (int)player.Bottom.X + player.direction * 200;
 			int y = (int)player.Bottom.Y;
 			int index = NPC.NewNPC(NPC.GetSource_NaturalSpawn(), x, y, type);
-			if (syncID < 0)
-			{
+			if (syncID < 0) {
 				//NPC refNPC = new NPC();
 				//refNPC.netDefaults(syncID);
 				Main.npc[index].SetDefaults(syncID);
 			}
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
+		public override void Draw(SpriteBatch spriteBatch) {
 			ModUtils.LoadNPC(npcType);
 
 			Texture2D useBackgroundTexture = (isFiltered ? filteredBackgroundTexture : backgroundTexture).Value;
@@ -259,8 +241,7 @@ namespace CheatSheet.Menus
 			spriteBatch.Draw(useBackgroundTexture, base.DrawPosition, null, base.BackgroundColor, 0f, Vector2.Zero, base.Scale, SpriteEffects.None, 0f);
 			Texture2D texture2D = TextureAssets.Npc[npcType].Value;
 
-			if (texture2D == null)
-            {
+			if (texture2D == null) {
 				base.Draw(spriteBatch);
 				return;
 			}
@@ -270,14 +251,11 @@ namespace CheatSheet.Menus
 
 			float num = 1f;
 			float num2 = (float)Slot.backgroundTexture.Width() * base.Scale * 0.6f;
-			if ((float)rectangle2.Width > num2 || (float)rectangle2.Height > num2)
-			{
-				if (rectangle2.Width > rectangle2.Height)
-				{
+			if ((float)rectangle2.Width > num2 || (float)rectangle2.Height > num2) {
+				if (rectangle2.Width > rectangle2.Height) {
 					num = num2 / (float)rectangle2.Width;
 				}
-				else
-				{
+				else {
 					num = num2 / (float)rectangle2.Height;
 				}
 			}
@@ -293,8 +271,7 @@ namespace CheatSheet.Menus
 			//	spriteBatch.Draw(texture2D, drawPosition, new Rectangle?(rectangle2), this.item.GetColor(Color.White), 0f, Vector2.Zero, num, SpriteEffects.None, 0f);
 			//}
 			spriteBatch.Draw(texture2D, drawPosition, new Rectangle?(rectangle2), Color.White, 0, Vector2.Zero, num, SpriteEffects.None, 0f);
-			if (npc.color != default(Color))
-			{
+			if (npc.color != default(Color)) {
 				spriteBatch.Draw(texture2D, drawPosition, new Rectangle?(rectangle2), npc.color, 0, Vector2.Zero, num, SpriteEffects.None, 0f);
 			}
 			base.Draw(spriteBatch);

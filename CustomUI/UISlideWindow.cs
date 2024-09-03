@@ -19,19 +19,15 @@ namespace CheatSheet.CustomUI
 
 		private bool _selected;
 
-		internal bool selected
-		{
+		internal bool selected {
 			get { return _selected; }
-			set
-			{
-				if (value == false)
-				{
+			set {
+				if (value == false) {
 					if (_selected && arrived && !hidden)
 						setShowHidePositions();
 					hidden = true;
 				}
-				else
-				{
+				else {
 					hidden = false;
 					Visible = true;
 				}
@@ -40,81 +36,66 @@ namespace CheatSheet.CustomUI
 			}
 		}
 
-		internal void setShowHidePositions()
-		{
+		internal void setShowHidePositions() {
 			shownPosition = Position;
 			hiddenPosition = Position;
 
-			if (Position.X + Width / 2 > Main.screenWidth / 2)
-			{
+			if (Position.X + Width / 2 > Main.screenWidth / 2) {
 				hiddenPosition.X = Main.screenWidth;
 			}
-			else
-			{
+			else {
 				hiddenPosition.X = -Width;
 			}
 		}
 
-		public UISlideWindow()
-		{
+		public UISlideWindow() {
 		}
 
-		protected override bool IsMouseInside()
-		{
-			if (hidden) return false;
+		protected override bool IsMouseInside() {
+			if (hidden)
+				return false;
 			return base.IsMouseInside();
 		}
 
-		internal void Hide()
-		{
+		internal void Hide() {
 			hidden = true;
 			arrived = false;
 			setShowHidePositions();
 		}
 
-		internal void SetDefaultPosition(Vector2 vector2)
-		{
+		internal void SetDefaultPosition(Vector2 vector2) {
 			Position = vector2;
 			defaultPosition = Position;
 			setShowHidePositions();
 		}
 
-		internal void Show()
-		{
+		internal void Show() {
 			hidden = false;
 			arrived = false;
 			Visible = true;
 
-			if (shownPosition.X > Main.screenWidth - 25 || shownPosition.Y > Main.screenHeight - 25)
-			{
+			if (shownPosition.X > Main.screenWidth - 25 || shownPosition.Y > Main.screenHeight - 25) {
 				shownPosition = defaultPosition;
 			}
-			if (shownPosition.X < -Width + 25 || shownPosition.Y < -Height + 25)
-			{
+			if (shownPosition.X < -Width + 25 || shownPosition.Y < -Height + 25) {
 				shownPosition = defaultPosition;
 			}
 		}
 
-		public override void Update()
-		{
-			if (!arrived)
-			{
-				if (this.hidden)
-				{
+		public override void Update() {
+			if (!arrived) {
+				if (this.hidden) {
 					this.lerpAmount -= .01f * ItemBrowser.moveSpeed;
-					if (this.lerpAmount < 0f)
-					{
+					if (this.lerpAmount < 0f) {
 						this.lerpAmount = 0f;
 						arrived = true;
 						this.Visible = false;
 					}
 					base.Position = Vector2.SmoothStep(hiddenPosition, shownPosition, lerpAmount);
 				}
-				else
-				{
+				else {
 					this.lerpAmount += .01f * ItemBrowser.moveSpeed;
-					if (this.lerpAmount > 1f)
-					{
+					if (this.lerpAmount > 1f) {
 						this.lerpAmount = 1f;
 						arrived = true;
 					}

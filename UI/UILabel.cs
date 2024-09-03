@@ -18,60 +18,47 @@ namespace CheatSheet.UI
 
 		private float height;
 
-		public static DynamicSpriteFont defaultFont
-		{
-			get
-			{
+		public static DynamicSpriteFont defaultFont {
+			get {
 				return FontAssets.DeathText.Value;
 			}
 		}
 
-		public string Text
-		{
-			get
-			{
+		public string Text {
+			get {
 				return this.text;
 			}
-			set
-			{
+			set {
 				this.text = value;
 				this.SetWidthHeight();
 			}
 		}
 
-		public bool TextOutline
-		{
-			get
-			{
+		public bool TextOutline {
+			get {
 				return this.textOutline;
 			}
-			set
-			{
+			set {
 				this.textOutline = value;
 			}
 		}
 
-		public UILabel(string text)
-		{
+		public UILabel(string text) {
 			this.font = UILabel.defaultFont;
 			this.Text = text;
 		}
 
-		public UILabel()
-		{
+		public UILabel() {
 			this.font = UILabel.defaultFont;
 			this.Text = "";
 		}
 
-		protected override Vector2 GetOrigin()
-		{
+		protected override Vector2 GetOrigin() {
 			return base.GetOrigin();
 		}
 
-		private void SetWidthHeight()
-		{
-			if (this.Text != null)
-			{
+		private void SetWidthHeight() {
+			if (this.Text != null) {
 				Vector2 vector = this.font.MeasureString(this.Text);
 				this.width = vector.X;
 				this.height = vector.Y;
@@ -81,30 +68,23 @@ namespace CheatSheet.UI
 			this.height = 0f;
 		}
 
-		protected override float GetWidth()
-		{
+		protected override float GetWidth() {
 			return this.width * base.Scale;
 		}
 
-		protected override float GetHeight()
-		{
-			if (this.height == 0f)
-			{
+		protected override float GetHeight() {
+			if (this.height == 0f) {
 				return this.font.MeasureString("H").Y * base.Scale;
 			}
 			return this.height * base.Scale;
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			if (this.Text != null)
-			{
-				if (this.TextOutline)
-				{
+		public override void Draw(SpriteBatch spriteBatch) {
+			if (this.Text != null) {
+				if (this.TextOutline) {
 					Utils.DrawBorderStringFourWay(spriteBatch, this.font, this.Text, base.DrawPosition.X, base.DrawPosition.Y, base.ForegroundColor, Color.Black, base.Origin / base.Scale, base.Scale);
 				}
-				else
-				{
+				else {
 					spriteBatch.DrawString(this.font, this.Text, base.DrawPosition, base.ForegroundColor, 0f, base.Origin / base.Scale, base.Scale, SpriteEffects.None, 0f);
 				}
 			}

@@ -28,20 +28,15 @@ namespace CheatSheet.Menus
 
 		private int slotRows = 6;
 
-		public int[] selectedCategory
-		{
-			get
-			{
+		public int[] selectedCategory {
+			get {
 				return this._selectedCategory;
 			}
-			set
-			{
+			set {
 				List<int> list = value.ToList<int>();
-				for (int i = 0; i < list.Count; i++)
-				{
+				for (int i = 0; i < list.Count; i++) {
 					Slot slot = this.allItemsSlots[list[i]];
-					if (slot.item.type == 0 || GetTooltipsAsString(slot.item.ToolTip) == "You shouldn't have this")
-					{
+					if (slot.item.type == 0 || GetTooltipsAsString(slot.item.ToolTip) == "You shouldn't have this") {
 						list.RemoveAt(i);
 						i--;
 					}
@@ -50,40 +45,33 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		private string GetTooltipsAsString(ItemTooltip toolTip)
-		{
+		private string GetTooltipsAsString(ItemTooltip toolTip) {
 			StringBuilder sb = new StringBuilder();
-			for (int j = 0; j < toolTip.Lines; j++)
-			{
+			for (int j = 0; j < toolTip.Lines; j++) {
 				sb.Append(toolTip.GetLine(j) + "\n");
 			}
 			return sb.ToString().ToLower();
 		}
 
-		public ItemView()
-		{
+		public ItemView() {
 			base.Width = (this.slotSize + (float)this.slotSpace) * (float)this.slotColumns + (float)this.slotSpace + 20f;
 			base.Height = 300f;
 			this.allItemsSlots = new Slot[TextureAssets.Item.Length];
-			for (int i = 0; i < this.allItemsSlots.Length; i++)
-			{
+			for (int i = 0; i < this.allItemsSlots.Length; i++) {
 				this.allItemsSlots[i] = new Slot(i);
 			}
 			//	this.allItemsSlots = (from s in this.allItemsSlots
 			//						  select s).ToArray<Slot>();
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
+		public override void Draw(SpriteBatch spriteBatch) {
 			base.Draw(spriteBatch);
 		}
 
-		public void ReorderSlots()
-		{
+		public void ReorderSlots() {
 			base.ScrollPosition = 0f;
 			base.ClearContent();
-			for (int i = 0; i < this.activeSlots.Length; i++)
-			{
+			for (int i = 0; i < this.activeSlots.Length; i++) {
 				int num = i;
 				Slot slot = this.allItemsSlots[this.activeSlots[num]];
 				int num2 = i % this.slotColumns;

@@ -16,8 +16,7 @@ namespace CheatSheet.Menus
 		public static BossDownerWindow bossDownerWindow;
 		public static CheatSheet cheatSheet;
 
-		public static UIImage GetButton(Mod mod)
-		{
+		public static UIImage GetButton(Mod mod) {
 			cheatSheet = mod as CheatSheet;
 
 			bossDownerWindow = new BossDownerWindow(mod);
@@ -37,17 +36,14 @@ namespace CheatSheet.Menus
 			return button;
 		}
 
-		private static void bBossDownerToggle_onLeftClick(object sender, EventArgs e)
-		{
+		private static void bBossDownerToggle_onLeftClick(object sender, EventArgs e) {
 			UIImage uIImage = (UIImage)sender;
 
-			if (BossDowner.bossDownerWindow.selected)
-			{
+			if (BossDowner.bossDownerWindow.selected) {
 				BossDowner.bossDownerWindow.selected = false;
 				uIImage.ForegroundColor = Hotbar.buttonUnselectedColor;
 			}
-			else
-			{
+			else {
 				cheatSheet.hotbar.DisableAllWindows();
 				bossDownerWindow.selected = true;
 				uIImage.ForegroundColor = Hotbar.buttonSelectedColor;
@@ -60,8 +56,7 @@ namespace CheatSheet.Menus
 		public Mod mod;
 		private float spacing = 16f;
 
-		public BossDownerWindow(Mod mod)
-		{
+		public BossDownerWindow(Mod mod) {
 			this.mod = mod;
 			this.CanMove = true;
 			base.Width = 450;
@@ -96,8 +91,7 @@ namespace CheatSheet.Menus
                 NPC.downedMoonlord, // moonlord
             };
 
-			for (int i = 0; i < cb.Length; i++)
-			{
+			for (int i = 0; i < cb.Length; i++) {
 				cb[i] = new UICheckbox(labels[i]);
 				cb[i].Selected = selecteds[i];
 				cb[i].X = spacing;
@@ -107,11 +101,9 @@ namespace CheatSheet.Menus
 			}
 		}
 
-		private void bCheckBoxTicked(object sender, EventArgs e)
-		{
+		private void bCheckBoxTicked(object sender, EventArgs e) {
 			UICheckbox checkbox = (UICheckbox)sender;
-			switch (checkbox.Text)
-			{
+			switch (checkbox.Text) {
 				case "Eye of Cthulhu":
 					NPC.downedBoss1 = checkbox.Selected;
 					break;
@@ -175,8 +167,7 @@ namespace CheatSheet.Menus
 			////BossDowner.bossDownerWindow.selected = true;
 		}
 
-		private void bClose_onLeftClick(object sender, EventArgs e)
-		{
+		private void bClose_onLeftClick(object sender, EventArgs e) {
 			Hide();
 		}
 	}
