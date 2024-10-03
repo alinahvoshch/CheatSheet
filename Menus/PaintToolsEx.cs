@@ -304,7 +304,7 @@ namespace CheatSheet
 				string path;
 				List<string> list = new List<string>();
 				foreach (var slot in paintToolsView.slotList) {
-					path = $@"{exportPath}\CheatSheet_PaintTools_{index++}.json";
+					path = Path.Combine(exportPath, $"CheatSheet_PaintTools_{index++}.json");
 					list.Add(path);
 					File.WriteAllText(path, JsonConvert.SerializeObject(slot.stampInfo.Tiles), Encoding.UTF8);
 				}
